@@ -66,6 +66,10 @@ const config: Config = {
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
+          type: 'localeDropdown',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/pcode/pcode-docs',
           label: 'GitHub',
           position: 'right',
@@ -75,19 +79,6 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Installation',
-              to: '/docs/installation',
-            },
-            {
-              label: 'Feature Guides',
-              to: '/docs/feature-guides',
-            },
-          ],
-        },
         {
           title: 'Community',
           items: [
