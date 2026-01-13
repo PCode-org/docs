@@ -317,7 +317,7 @@ The sidebar configuration MUST include the Quick Start category positioned first
 
 ### Requirement: Quick Start Project Creation Documentation
 
-The Quick Start documentation series MUST include a comprehensive guide for creating and configuring the first project in PCode.
+The Quick Start documentation series MUST include a comprehensive guide for creating and configuring the first project in PCode, with visual screenshots demonstrating each key step of the workflow.
 
 #### Scenario: Access project creation guide
 
@@ -339,6 +339,22 @@ The Quick Start documentation series MUST include a comprehensive guide for crea
   - Step 5: Regular maintenance guidelines
 **And** each step includes clear instructions and expected outcomes
 
+#### Scenario: Visual screenshots guide users through key steps
+
+**Given** the user is reading the "Create Your First Project" document
+**When** the user reaches each key operational step
+**Then** the document MUST include visual screenshots demonstrating:
+  - Step 2.1: Clicking the "New Project" button in the PCode interface
+  - Step 2.2: Filling in project general information form
+  - Step 2.3: Viewing the newly created project in the project list
+  - Step 3.1: Clicking the project's SDD tab to initialize SDD
+  - Step 3.2: Display state after SDD initialization is complete
+  - Step 4.1: Clicking the optimize button to optimize Project.md
+**And** each screenshot MUST have a descriptive alt text in Chinese
+**And** screenshots MUST be placed immediately after the corresponding step description
+**And** screenshots MUST use absolute paths starting with `/img/create-project/`
+**And** screenshot filenames MUST match their descriptive content
+
 #### Scenario: Chinese translation completeness
 
 **Given** the English version of "Create Your First Project" exists
@@ -356,6 +372,7 @@ The Quick Start documentation series MUST include a comprehensive guide for crea
 **And** frontmatter includes `title` and `description` properties
 **And** code blocks use appropriate syntax highlighting (bash, yaml, etc.)
 **And** internal links use proper Docusaurus path format
+**And** images use standard Docusaurus markdown syntax: `![alt text](/img/path/to/image.png)`
 
 #### Scenario: Integration with existing Quick Start
 
@@ -366,11 +383,9 @@ The Quick Start documentation series MUST include a comprehensive guide for crea
 **And** the document is automatically included in navigation
 **And** a reference to the next step (project creation) exists in installation guide if applicable
 
----
-
 ### Requirement: Quick Start Conversation Session Documentation
 
-The documentation site SHALL provide a comprehensive guide for creating and using conversation sessions in PCode, as the third document in the Quick Start series.
+The documentation site SHALL provide a comprehensive guide for creating and using conversation sessions in PCode, as the third document in the Quick Start series. The guide SHALL include visual demonstrations through screenshots showing actual PCode interface interactions for both read-only and edit modes.
 
 #### Scenario: User creates their first conversation session
 
@@ -379,7 +394,8 @@ The documentation site SHALL provide a comprehensive guide for creating and usin
 - **WHEN** the user navigates to the Quick Start - Creating a Conversation Session guide
 - **THEN** the guide shall explain how to locate the session list
 - **AND** the guide shall explain how to click "Add Chat" button
-- **AND** the guide shall show that a new conversation window appears
+- **AND** the guide shall show screenshots of the session list interface
+- **AND** the guide shall show screenshots of the new conversation window
 - **AND** the user shall be able to successfully create a conversation session
 
 #### Scenario: User understands read-only vs. edit mode
@@ -389,8 +405,20 @@ The documentation site SHALL provide a comprehensive guide for creating and usin
 - **THEN** the guide shall explain read-only mode is the default
 - **AND** the guide shall list what AI can do in read-only mode (read files, analyze, describe)
 - **AND** the guide shall list what AI cannot do in read-only mode (modify files)
-- **AND** the guide shall explain how to switch to edit mode
+- **AND** the guide shall provide a practical example with screenshots: "了解一下这个项目" (understand this project)
+- **AND** the screenshots shall demonstrate AI analyzing and summarizing project structure in read-only mode
+- **AND** the guide shall explain how to switch to edit mode with screenshots
 - **AND** the guide shall explain when to use edit mode
+
+#### Scenario: User sees edit mode demonstration
+
+- **GIVEN** the user is reading the conversation session guide
+- **WHEN** the user reaches the "Edit Mode" section
+- **THEN** the guide shall show screenshots of switching to edit mode
+- **AND** the guide shall provide a practical example with screenshots: requesting AI to update README file
+- **AND** the screenshots shall demonstrate AI executing code modifications
+- **AND** the guide shall explain the permissions available in edit mode
+- **AND** the guide shall show the resulting file changes in screenshots
 
 #### Scenario: User learns about session types
 
@@ -409,6 +437,7 @@ The documentation site SHALL provide a comprehensive guide for creating and usin
 - **AND** the guide shall provide examples for review and feedback (code review, bug spotting)
 - **AND** the guide shall provide examples for planning and design (task breakdown, implementation planning)
 - **AND** the guide shall provide examples for code changes in edit mode (refactoring, bug fixes)
+- **AND** each use case shall reference relevant screenshots
 
 #### Scenario: User accesses Chinese translation
 
@@ -419,6 +448,7 @@ The documentation site SHALL provide a comprehensive guide for creating and usin
 - **AND** all sections shall be translated accurately
 - **AND** technical terms shall use consistent Chinese terminology
 - **AND** UI elements shall match the actual PCode interface
+- **AND** all screenshots shall display correctly in the Chinese version
 
 #### Scenario: User compares with traditional IDEs
 
@@ -435,6 +465,32 @@ The documentation site SHALL provide a comprehensive guide for creating and usin
 - **THEN** the guide shall provide a preview of idea sessions
 - **AND** the guide shall link to the next quick-start document (Creating an Idea Session)
 - **AND** the user shall understand the progression from simple chat to advanced workflow
+
+#### Scenario: User views visual workflow diagrams
+
+- **GIVEN** the user is learning about conversation sessions
+- **WHEN** the user views the "Understanding Modes" section
+- **THEN** the guide shall include a Mermaid flowchart diagram showing mode switching flow
+- **AND** the guide shall include Mermaid sequence diagrams for read-only mode workflow
+- **AND** the guide shall include Mermaid sequence diagrams for edit mode workflow
+- **AND** the diagrams shall visually demonstrate the permission differences between modes
+
+#### Scenario: All screenshots load correctly
+
+- **GIVEN** the conversation session document includes screenshots
+- **WHEN** the page loads in a browser
+- **THEN** all screenshots SHALL load without broken image errors
+- **AND** screenshots SHALL use correct Docusaurus static asset paths (`/img/create-normal-session/*.png`)
+- **AND** screenshots SHALL include descriptive alt text for accessibility
+- **AND** screenshots SHALL be responsive and display correctly on different screen sizes
+
+#### Scenario: User learns session management
+
+- **GIVEN** the user has created conversation sessions
+- **WHEN** the user reaches the session management section
+- **THEN** the guide shall show how to delete conversation sessions with screenshots
+- **AND** the screenshots shall demonstrate the deletion process
+- **AND** the guide shall explain when to delete or archive sessions
 
 ### Requirement: Chinese Translation Configuration
 
@@ -665,4 +721,195 @@ Documentation contributors MUST follow established conventions when using Mermai
 - **THEN** explanatory text precedes or follows the diagram
 - **AND** the diagram's purpose is clear from context
 - **AND** key elements of the diagram are explained in the surrounding text
+
+### Requirement: Cross-Platform Documentation with Tabs Component
+
+Documentation pages that include platform-specific instructions for Windows, macOS, and Linux MUST use Docusaurus Tabs and TabItem components to organize content by platform.
+
+#### Scenario: Installation guide uses Tabs for platform-specific instructions
+
+- **GIVEN** the installation guide (`docs/quick-start/installation.md`) includes instructions for Docker, Node.js, and software package deployment
+- **WHEN** a user views the installation guide
+- **THEN** the guide MUST use `<Tabs>` and `<TabItem>` components to separate Windows, macOS, and Linux instructions
+- **AND** each platform MUST have its own `<TabItem>` with `value` attribute set to "win", "mac", or "linux"
+- **AND** each `<TabItem>` MUST have a `label` attribute set to "Windows", "macOS", or "Linux"
+- **AND** users can click between platform tabs to view only their operating system's instructions
+
+#### Scenario: Code blocks within TabItems maintain syntax highlighting
+
+- **GIVEN** a TabItem contains command-line instructions
+- **WHEN** the TabItem includes a code block for bash or PowerShell commands
+- **THEN** the code block MUST use appropriate language tags (`bash`, `powershell`, `csharp`, `fsharp`)
+- **AND** Prism.js syntax highlighting MUST be applied correctly within the TabItem
+- **AND** the code block MUST display a title attribute when specified (e.g., `title="在 Ubuntu/Debian 上安装 Docker"`)
+
+#### Scenario: Tabs improve mobile reading experience
+
+- **GIVEN** a user is viewing documentation on a mobile device
+- **WHEN** the page contains cross-platform instructions organized with Tabs
+- **THEN** the user MUST be able to tap on platform labels to switch between platforms
+- **AND** the page length MUST be reduced compared to listing all platforms sequentially
+- **AND** scrolling MUST be minimized as users only see their selected platform's content
+
+#### Scenario: MDX import statements are present
+
+- **GIVEN** a markdown file uses Tabs components
+- **WHEN** the file is parsed as MDX
+- **THEN** the file MUST import Tabs and TabItem from `@theme/Tabs` and `@theme/TabItem`
+- **AND** the import statements MUST be placed at the top of the file after frontmatter
+- **AND** the file extension MAY remain `.md` as Docusaurus supports MDX in `.md` files
+
+#### Scenario: Build validation passes with Tabs
+
+- **GIVEN** documentation files have been updated to use Tabs components
+- **WHEN** `npm run build` is executed
+- **THEN** the build MUST complete successfully without MDX parsing errors
+- **AND** `npm run typecheck` MUST pass without TypeScript errors
+- **AND** the build MUST not report any broken links (respecting `onBrokenLinks: 'throw'` configuration)
+
+#### Scenario: Tabs maintain consistency across documentation
+
+- **GIVEN** multiple documentation pages contain cross-platform instructions
+- **WHEN** different pages use Tabs components
+- **THEN** all Tabs MUST use the same platform naming convention: "Windows", "macOS", "Linux"
+- **AND** all TabItem value attributes MUST use consistent naming: "win", "mac", "linux"
+- **AND** the visual appearance of Tabs MUST be consistent across all pages
+
+#### Scenario: Search engines can index TabItem content
+
+- **GIVEN** a documentation page uses Tabs to organize platform-specific content
+- **WHEN** a user searches for commands or instructions using the site search
+- **THEN** search MUST be able to find content within TabItems
+- **AND** clicking a search result MUST navigate to the correct page and automatically open the relevant TabItem
+
+#### Scenario: Future documentation follows Tabs convention
+
+- **GIVEN** a contributor is creating new documentation with platform-specific instructions
+- **WHEN** the documentation includes Windows, macOS, or Linux specific steps
+- **THEN** the contributor MUST use Tabs and TabItem components instead of bullet lists
+- **AND** the contributor MUST follow the established naming conventions for values and labels
+- **AND** the contributor MUST ensure code blocks within TabItems have appropriate language tags
+
+### Requirement: Related Software Installation Documentation Category
+
+The documentation site MUST include a "相关软件安装" (Related Software Installation) category that provides installation guides for third-party software required by PCode users.
+
+#### Scenario: Category appears in sidebar
+
+- **GIVEN** the documentation site is running
+- **WHEN** a user views the documentation sidebar
+- **THEN** a "相关软件安装" category MUST be displayed
+- **AND** the category MUST be positioned after Quick Start in the navigation hierarchy
+- **AND** the category CAN be expanded to show software installation guides
+
+#### Scenario: Category metadata configured
+
+- **GIVEN** the `docs/related-software-installation/_category_.json` file exists
+- **WHEN** the file is parsed by Docusaurus
+- **THEN** the category displays with the label "相关软件安装"
+- **AND** the category position is configured to appear after Quick Start
+- **AND** a generated-index page MAY be created for the category
+
+#### Scenario: Category supports multiple software guides
+
+- **GIVEN** the related software installation category structure exists
+- **WHEN** contributors add new installation guides
+- **THEN** each software MUST have its own subdirectory (e.g., `postgresql/`, `nodejs/`, `git/`)
+- **AND** each subdirectory MUST contain its own `_category_.json` with software-specific metadata
+- **AND** the sidebar MUST automatically include all subdirectories
+
+---
+
+### Requirement: PostgreSQL on Windows Installation Guide
+
+The documentation site MUST provide a comprehensive guide for installing PostgreSQL on Windows operating system as the first document in the Related Software Installation category.
+
+#### Scenario: User accesses PostgreSQL installation guide
+
+- **GIVEN** the user has navigated to the Related Software Installation category
+- **WHEN** the user clicks on the PostgreSQL subdirectory
+- **THEN** an installation guide titled "在 Windows 上安装 PostgreSQL" MUST be accessible
+- **AND** the guide MUST appear as the first document in the PostgreSQL subdirectory
+
+#### Scenario: Guide includes complete installation workflow
+
+- **GIVEN** the user is reading the PostgreSQL installation guide
+- **WHEN** the user views the document content
+- **THEN** the guide MUST include all 11 installation steps with corresponding screenshots:
+  - Step 1: 打开安装界面
+  - Step 2: 设置安装的文件夹
+  - Step 3: 设置安装的内容
+  - Step 4: 设置之后数据库存放数据的文件夹
+  - Step 5: 设置数据库初始用户的密码
+  - Step 6: 设置数据库的端口
+  - Step 7: 设置数据库的字符集和文化
+  - Step 8: 查看安装的计划
+  - Step 9: 准备开始安装
+  - Step 10: 实时展示安装进度
+  - Step 11: 安装已完成
+- **AND** each step MUST include descriptive text in Chinese
+- **AND** each step MUST include the corresponding screenshot from `static/img/install-postgres-windows/`
+
+#### Scenario: Screenshots are correctly referenced
+
+- **GIVEN** the installation guide includes screenshot references
+- **WHEN** the documentation page is rendered
+- **THEN** all images MUST load correctly from `/img/install-postgres-windows/` path
+- **AND** each image MUST have appropriate alt text describing the installation step
+- **AND** no broken image links MUST appear on the page
+
+#### Scenario: Guide includes post-installation information
+
+- **GIVEN** the user has completed reading the installation steps
+- **WHEN** the user reaches the end of the document
+- **THEN** the guide MUST include verification steps to confirm successful installation
+- **AND** the guide MAY include tips for common configuration tasks
+- **AND** the guide MAY include a troubleshooting section for common issues
+
+#### Scenario: Document follows conventions
+
+- **GIVEN** the `install-on-windows.md` file exists
+- **WHEN** the file is validated
+- **THEN** the file MUST use kebab-case naming
+- **AND** frontmatter MUST include `title` and `description` properties in Chinese
+- **AND** the file MUST use valid markdown syntax
+- **AND** image references MUST use relative paths from the static directory
+
+#### Scenario: Guide provides user-friendly experience
+
+- **GIVEN** a user is new to PostgreSQL installation
+- **WHEN** the user follows the guide step-by-step
+- **THEN** each step MUST be clearly numbered and labeled
+- **AND** screenshots MUST show the actual installation interface
+- **AND** the user MUST be able to complete the installation without external references
+
+---
+
+### Requirement: Sidebar Configuration for Related Software Installation
+
+The sidebar configuration MUST include the Related Software Installation category with proper positioning and metadata.
+
+#### Scenario: Sidebar includes Related Software Installation category
+
+- **GIVEN** the `sidebars.ts` file is configured
+- **WHEN** the sidebar renders in the browser
+- **THEN** the Related Software Installation category MUST appear in the sidebar
+- **AND** the category MUST be positioned after Quick Start
+- **AND** the category MUST use autogenerated subcategory structure
+
+#### Scenario: PostgreSQL guide appears in correct location
+
+- **GIVEN** the Related Software Installation category is expanded
+- **WHEN** a user views the PostgreSQL subcategory
+- **THEN** the "在 Windows 上安装 PostgreSQL" document MUST be listed
+- **AND** the document MUST be the first item in the PostgreSQL subcategory
+- **AND** clicking the document MUST navigate to the installation guide
+
+#### Scenario: Extensibility for future software guides
+
+- **GIVEN** the sidebar configuration uses autogenerated structure
+- **WHEN** contributors add new software installation guides (e.g., Node.js, Git)
+- **THEN** new subdirectories and documents MUST automatically appear in the sidebar
+- **AND** no manual sidebar configuration updates MUST be required
+- **AND** the structure MUST remain consistent across all software guides
 

@@ -4,6 +4,9 @@ description: 了解如何在本地机器上安装和设置 PCode。
 sidebar_position: 10
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 安装指南
 
 本指南将引导您完成在本地机器上安装和设置 PCode 的过程。在开始安装之前，PCode 需要先安装一些先决条件。
@@ -18,14 +21,22 @@ PCode 使用 PostgreSQL 作为其数据库。运行 PostgreSQL 的推荐方式�
 
 #### 安装 Docker
 
-- **Windows**: 下载并安装 [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
-- **macOS**: 下载并安装 [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
-- **Linux**: 使用您的包管理器安装 Docker
+<Tabs>
+  <TabItem value="win" label="Windows">
+    下载并安装 [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    下载并安装 [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    使用您的包管理器安装 Docker
 
 ```bash title="在 Ubuntu/Debian 上安装 Docker"
 sudo apt-get update
 sudo apt-get install docker.io docker-compose
 ```
+  </TabItem>
+</Tabs>
 
 #### 使用 Docker 运行 PostgreSQL
 
@@ -63,13 +74,25 @@ node --version
 
 如果 Node.js 未安装或您的版本低于 18.0：
 
-- **Windows**: 从 [nodejs.org](https://nodejs.org/) 下载并安装
-- **macOS**: 使用 Homebrew: `brew install node`
-- **Linux**: 使用您的包管理器：
+<Tabs>
+  <TabItem value="win" label="Windows">
+    从 [nodejs.org](https://nodejs.org/) 下载并安装 LTS 版本
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    使用 Homebrew 安装：
+
+```bash
+brew install node
+```
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    使用您的包管理器安装：
 
 ```bash title="Ubuntu/Debian"
 sudo apt-get install nodejs npm
 ```
+  </TabItem>
+</Tabs>
 
 #### 验证 npm 安装
 
@@ -183,39 +206,39 @@ chmod +x check-environment.sh
 
 PCode 以软件包的形式分发，您需要下载并解压到本地机器。
 
-### Windows
-
-1. 下载 PCode 软件包（`.zip` 格式）
-2. 将软件包解压到所需位置，例如：`D:\code\pcode`
-3. 打开命令提示符或 PowerShell 并导航到解压目录：
+<Tabs>
+  <TabItem value="win" label="Windows">
+    1. 下载 PCode 软件包（`.zip` 格式）
+    2. 将软件包解压到所需位置，例如：`D:\code\pcode`
+    3. 打开命令提示符或 PowerShell 并导航到解压目录：
 
 ```powershell
 cd D:\code\pcode
 ```
-
-### Linux
-
-1. 下载 PCode 软件包（`.tar.gz` 格式）
-2. 解压软件包：
-
-```bash
-tar -xzf pcode-package.tar.gz
-cd pcode
-```
-
-或使用图形化解压工具将其解压到所需位置。
-
-### macOS
-
-1. 下载 PCode 软件包（`.tar.gz` 格式）
-2. 解压软件包：
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    1. 下载 PCode 软件包（`.tar.gz` 格式）
+    2. 解压软件包：
 
 ```bash
 tar -xzf pcode-package.tar.gz
 cd pcode
 ```
 
-或在 Finder 中双击压缩包进行解压。
+    或在 Finder 中双击压缩包进行解压。
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    1. 下载 PCode 软件包（`.tar.gz` 格式）
+    2. 解压软件包：
+
+```bash
+tar -xzf pcode-package.tar.gz
+cd pcode
+```
+
+    或使用图形化解压工具将其解压到所需位置。
+  </TabItem>
+</Tabs>
 
 ## 配置数据库连接
 
@@ -248,9 +271,9 @@ PCode 需要连接到您的 PostgreSQL 数据库。数据库连接在 `appsettin
 
 PCode 为不同平台提供了启动脚本。
 
-### Windows
-
-使用提供的批处理文件启动服务：
+<Tabs>
+  <TabItem value="win" label="Windows">
+    使用提供的批处理文件启动服务：
 
 ```powershell
 start.bat
@@ -261,10 +284,9 @@ start.bat
 2. 应用数据库迁移
 3. 启动 PCode 服务
 4. 显示访问 URL
-
-### Linux/macOS
-
-使用提供的 shell 脚本启动服务：
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    使用提供的 shell 脚本启动服务：
 
 ```bash
 chmod +x start.sh
@@ -276,6 +298,22 @@ chmod +x start.sh
 2. 应用数据库迁移
 3. 启动 PCode 服务
 4. 显示访问 URL
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    使用提供的 shell 脚本启动服务：
+
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+此脚本将：
+1. 检查 PostgreSQL 是否正在运行
+2. 应用数据库迁移
+3. 启动 PCode 服务
+4. 显示访问 URL
+  </TabItem>
+</Tabs>
 
 ### 启动故障排除
 
@@ -328,11 +366,25 @@ PCode 界面应该会加载，显示主仪表板。
 
 要停止 PCode 服务：
 
-- **Windows**: 在运行服务的命令窗口中按 `Ctrl+C`
-- **Linux/macOS**: 在运行服务的终端中按 `Ctrl+C`，或使用：
-  ```bash
-  ./stop.sh
-  ```
+<Tabs>
+  <TabItem value="win" label="Windows">
+    在运行服务的命令窗口中按 `Ctrl+C`
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+    在运行服务的终端中按 `Ctrl+C`，或使用：
+
+```bash
+./stop.sh
+```
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    在运行服务的终端中按 `Ctrl+C`，或使用：
+
+```bash
+./stop.sh
+```
+  </TabItem>
+</Tabs>
 
 要停止 PostgreSQL：
 
@@ -359,10 +411,28 @@ docker stop pcode-postgres
 如果端口 `34567` 已被占用：
 
 1. 查找使用该端口的进程：
-   ```bash
-   lsof -i :34567  # Linux/macOS
-   netstat -ano | findstr :34567  # Windows
-   ```
+
+<Tabs>
+  <TabItem value="win" label="Windows">
+
+```powershell
+netstat -ano | findstr :34567
+```
+  </TabItem>
+  <TabItem value="mac" label="macOS">
+
+```bash
+lsof -i :34567
+```
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+
+```bash
+lsof -i :34567
+```
+  </TabItem>
+</Tabs>
+
 2. 停止冲突的进程或在配置中更改端口
 
 ### 迁移失败

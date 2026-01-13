@@ -17,13 +17,33 @@ sidebar_position: 20
 - 已安装并配置 Git
 - 对命令行操作的基本了解
 
-## 步骤 1：准备您的仓库
+## 步骤 1：准备您的代码仓库
 
-在将项目添加到 PCode 之前，请确保您的仓库已准备就绪。
+在将项目添加到 PCode 之前，您需要准备一个想要用 PCode 管理的代码仓库。
 
-### 初始化 Git（如果尚未完成）
+### 克隆您的代码仓库
 
-如果您的项目还不是 Git 仓库，请初始化它：
+如果您想要管理的代码已经在远程仓库（GitHub、GitLab 等）中，请将其克隆到本地：
+
+```bash
+# 克隆您的代码仓库到本地
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+```
+
+克隆后，记下仓库的本地路径（例如：`C:\Users\YourName\Projects\your-repo` 或 `/home/yourname/projects/your-repo`），在下一步中您将需要这个路径。
+
+:::tip
+PCode 适合管理任何您想要通过 AI 辅助开发和优化的代码项目，包括：
+- 正在开发的功能项目
+- 需要重构或优化的现有代码
+- 团队协作的项目
+- 个人开源项目
+:::
+
+### 如果您的代码只在本地
+
+如果您想要管理的代码还在本地，尚未推送到远程仓库：
 
 ```bash
 cd /path/to/your/project
@@ -32,18 +52,12 @@ git add .
 git commit -m "Initial commit"
 ```
 
-### 远程仓库设置
-
-如果您使用远程仓库（GitHub、GitLab 等），请添加远程仓库：
+建议在 GitHub/GitLab 上创建远程仓库并推送：
 
 ```bash
 git remote add origin https://github.com/your-username/your-repo.git
 git push -u origin main
 ```
-
-:::tip
-建议将您的仓库放在像 GitHub 这样的远程平台上，以便更好地协作和备份。
-:::
 
 ## 步骤 2：在 PCode 界面中添加项目
 
@@ -55,193 +69,81 @@ git push -u origin main
 2. 点击导航侧边栏中的 **Projects**（项目）
 3. 点击 **Add Project**（添加项目）按钮
 
+![点击新建项目按钮](/img/create-project/step1-click-new-project-button.png)
+
 ### 配置项目设置
 
 填写项目信息：
 
-| 字段 | 描述 | 示例 |
-|------|------|------|
-| **名称** | 项目的友好名称 | `我的网站` |
-| **仓库路径** | 仓库的本地路径 | `/Users/john/projects/my-website` |
-| **描述** | 可选的项目描述 | `使用 React 构建的个人网站` |
-| **标签** | 可选的组织标签 | `web, 前端, react` |
+![填写项目的一般信息](/img/create-project/step2-fill-project-information.png)
 
 :::note
 仓库路径必须指向本地计算机上有效的 Git 仓库。
 :::
 
-### 保存项目
+### 创建项目
 
 填写完必填信息后：
 
-1. 点击 **Save**（保存）添加项目
+1. 点击 **创建项目**按钮添加项目
 2. PCode 将验证仓库路径
 3. 您的项目将出现在项目列表中
 
-## 步骤 3：初始化 OpenSpec
+![新建项目之后，在项目列表当中就可以看到这个项目](/img/create-project/step3-project-list-view.png)
 
-OpenSpec 是 PCode 的提案和规范管理系统。在项目中初始化 OpenSpec 会创建管理变更所需的必要结构。
+## 步骤 3：初始化 SDD
 
-### 导航到项目详情
+SDD（软件设计文档）是 PCode 中用于管理项目设计和变更的重要组件。在项目中初始化 SDD 会创建管理变更所需的必要结构。
 
-1. 在项目列表中点击您新创建的项目
-2. 您将看到项目概览页面
+### 运行 SDD 初始化
 
-### 运行 OpenSpec 初始化
+在项目概览中，找到 SDD 部分：
 
-在项目概览中，找到 **OpenSpec** 部分：
+1. 点击项目的 SDD tab
 
-1. 点击 **Initialize OpenSpec**（初始化 OpenSpec）
-2. PCode 将在您的仓库中创建以下结构：
+![点击项目的 SDD tab，可以对 SDD 进行初始化](/img/create-project/step4-click-sdd-tab.png)
 
-```
-your-repository/
-└── openspec/
-    ├── project.md          # 项目元数据和配置
-    ├── changes/            # 变更提案目录
-    │   └── .gitkeep
-    ├── specs/              # 规范目录（可选）
-    │   └── .gitkeep
-    └── AGENTS.md           # OpenSpec 代理指令
-```
+2. 点击 **初始化 SDD** 按钮
 
-### 提交 OpenSpec 结构
-
-初始化后，将新文件提交到您的仓库：
-
-```bash
-cd /path/to/your/project
-git add openspec/
-git commit -m "初始化 OpenSpec 结构"
-```
-
-:::tip
-将 OpenSpec 结构保留在版本控制中，以跟踪所有提案和规范。
-:::
+![初始化完 SDD 之后显示的状态](/img/create-project/step5-sdd-initialized-status.png)
 
 ## 步骤 4：优化 project.md
 
-`openspec/project.md` 文件包含有关您项目的重要元数据。让我们根据您的需求进行自定义。
+PCode 会自动为您优化 `project.md` 文件，添加详细的项目信息和提示词配置。
 
-### 编辑 project.md
+### 运行优化
 
-在文本编辑器中打开 `openspec/project.md`：
+1. 在项目详情页面，点击右上角的 **优化** 按钮
+
+![点击优化按钮，可以优化 Project.md](/img/create-project/step6-click-optimize-button.png)
+
+2. PCode 将自动分析您的代码仓库并生成优化的 project.md 内容
+
+:::info
+优化过程可能需要较长时间，具体取决于您的项目规模和复杂度。点击优化按钮后，您可以暂时离开，PCode 会在后台完成优化工作。
+:::
+
+## 步骤 5：提交到版本控制
+
+完成 SDD 初始化和 project.md 优化后，需要将这些重要的配置文件提交到您的版本控制系统。
+
+### 提交所有更改
+
+将所有生成的文件和优化后的配置提交到您的仓库：
 
 ```bash
 cd /path/to/your/project
-code openspec/project.md  # 或使用您首选的编辑器
+git add .
+git commit -m "初始化 SDD 并优化 project.md"
 ```
-
-### 了解 project.md 结构
-
-该文件包含以下部分：
-
-```markdown
----
-id: your-project-id
-name: Your Project Name
-description: A brief description of your project
-version: 0.1.0
-created: YYYY-MM-DD
----
-
-# 项目元数据
-
-此文件包含有关您项目的基本信息...
-```
-
-### 为您的项目自定义
-
-更新字段以匹配您的项目：
-
-| 字段 | 描述 | 示例 |
-|------|------|------|
-| **id** | 唯一标识符（短横线命名法） | `my-awesome-website` |
-| **name** | 显示名称 | `我的精彩网站` |
-| **description** | 简短描述 | `展示我工作的个人网站` |
-| **version** | 当前版本 | `0.1.0` |
-| **tags** | 项目标签 | `web, 个人, 作品集` |
-
-### project.md 示例
-
-```markdown
----
-id: my-portfolio-website
-name: 我的作品集网站
-description: 使用 Next.js 和 Tailwind CSS 构建的个人作品集网站
-version: 0.1.0
-created: 2025-01-12
-tags:
-  - web
-  - portfolio
-  - nextjs
-  - tailwind
----
-
-# 项目元数据
-
-该项目是一个展示我开发工作的个人作品集网站...
-```
-
-### 保存并提交
-
-自定义后：
-
-```bash
-git add openspec/project.md
-git commit -m "自定义项目元数据"
-```
-
-## 验证您的设置
-
-让我们验证一切是否正常工作。
-
-### 在 PCode 中检查项目
-
-1. 返回 PCode 界面
-2. 导航到您的项目
-3. 验证 OpenSpec 部分显示为已初始化
-4. 检查项目元数据是否正确显示
-
-### 创建您的第一个提案（可选）
-
-要测试 OpenSpec 工作流程，请尝试创建一个简单的提案：
-
-1. 在您的项目中，点击 **New Proposal**（新建提案）
-2. 输入标题："添加关于页面"
-3. 描述您想要进行的变更
-4. 保存提案
-5. 使用显示的 CLI 命令管理提案
 
 :::tip
-有关管理提案的更多详细信息，请参阅 [提案会话](/docs/quick-start/proposal-session)。
+将这些文件保留在版本控制中非常重要，因为：
+- **SDD 相关文件**包含了项目的提案、规范和变更管理结构，确保团队协作和变更追踪
+- **project.md** 文件包含了项目的重要元数据和 AI 交互的提示词配置，是 PCode 正常工作的关键
+
+将这些文件纳入版本控制，可以确保整个团队使用一致的配置，并完整记录项目的所有设计和决策过程。
 :::
-
-## 常见问题
-
-### 找不到仓库路径
-
-如果 PCode 找不到您的仓库：
-
-1. **验证路径**是否正确且为绝对路径
-2. **检查权限** - PCode 需要目录的读取权限
-3. **确保它是 Git 仓库** - 在目录中运行 `git status`
-
-### OpenSpec 初始化失败
-
-如果初始化失败：
-
-1. **检查目录权限** - 确保您可以写入仓库
-2. **验证 Git 已初始化** - 在项目目录中运行 `git status`
-3. **检查现有的 openspec 文件夹** - 如果存在则删除它并重试
-
-### Project.md 未更新
-
-如果对 `project.md` 的更改未反映：
-
-1. **保存文件** - 确保编辑器保存了更改
-2. **在 PCode 中刷新页面**
-3. **提交更改** - PCode 可能只跟踪已提交的更改
 
 ## 后续步骤
 
@@ -249,15 +151,3 @@ git commit -m "自定义项目元数据"
 
 - **[对话会话](/docs/quick-start/conversation-session)** - 了解如何使用 AI 驱动的编码会话
 - **[提案会话](/docs/quick-start/proposal-session)** - 深入了解管理提案
-
-## 总结
-
-在本指南中，您学习了如何：
-
-1. 为 PCode 准备仓库
-2. 通过 PCode 界面添加项目
-3. 在项目中初始化 OpenSpec
-4. 使用项目元数据自定义 `project.md`
-5. 验证您的设置
-
-现在您已经准备好将 PCode 的强大功能用于您的开发工作流程！
