@@ -103,7 +103,7 @@ services:
       start_period: 40s
 
   postgres:
-    image: bitnami/postgresql:16
+    image: bitnami/postgresql:latest
     container_name: hagicode-postgres
     environment:
       POSTGRES_DATABASE: hagicode
