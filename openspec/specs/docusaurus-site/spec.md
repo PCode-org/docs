@@ -1360,28 +1360,28 @@ The homepage MUST meet web accessibility standards to ensure users with disabili
 
 ### Requirement: Third-Party Analytics Integration
 
-The documentation site MUST support integration with third-party analytics tools through the Docusaurus `scripts` configuration for collecting user behavior insights.
+The documentation site MUST support integration with third-party analytics tools through component-level script injection using `react-helmet`. The site MUST also support content region attribution through `data-clarity-region` attributes to enable more granular analytics.
 
-#### Scenario: Clarity analytics script loads on all pages
+#### Scenario: Clarity analytics script loads via Footer component
 
-- **GIVEN** the `docusaurus.config.ts` file includes a `scripts` array configuration
+- **GIVEN** the Footer component has been swizzled to inject analytics scripts
 - **WHEN** any page of the documentation site is loaded
-- **THEN** the Microsoft Clarity analytics script MUST be injected into the page
+- **THEN** the Microsoft Clarity analytics script MUST be injected into the page `<head>` via `react-helmet`
 - **AND** the script MUST load asynchronously to avoid blocking page rendering
-- **AND** the script MUST use the configured Clarity Project ID
+- **AND** the script MUST use the Clarity Project ID from the `CLARITY_PROJECT_ID` environment variable
 - **AND** no console errors MUST occur related to the script
 
-#### Scenario: Clarity configuration supports environment variables
+#### Scenario: Clarity script is injected only when Project ID is configured
 
-- **GIVEN** the project uses environment variables for sensitive configuration
-- **WHEN** the Docusaurus configuration is built
-- **THEN** the Clarity Project ID MAY be sourced from a `CLARITY_PROJECT_ID` environment variable
-- **AND** the configuration MUST fall back to a hardcoded value if the environment variable is not set
+- **GIVEN** the Footer component uses environment variables for sensitive configuration
+- **WHEN** the application builds and renders
+- **THEN** the Clarity script MUST only be injected when `CLARITY_PROJECT_ID` environment variable is set
+- **AND** no script tag MUST be present in the HTML when the variable is not set
 - **AND** TypeScript type checking MUST pass without errors
 
-#### Scenario: Analytics integration does not break build process
+#### Scenario: Component-level script injection does not break build process
 
-- **GIVEN** the Clarity script is configured in `docusaurus.config.ts`
+- **GIVEN** the Clarity script is injected via the swizzled Footer component
 - **WHEN** `npm run build` is executed
 - **THEN** the build MUST complete successfully
 - **AND** no TypeScript errors MUST be reported
@@ -1390,12 +1390,36 @@ The documentation site MUST support integration with third-party analytics tools
 
 #### Scenario: Analytics script is privacy-conscious
 
-- **GIVEN** the Clarity analytics script is integrated
+- **GIVEN** the Clarity analytics script is integrated via component
 - **WHEN** users access the documentation site
 - **THEN** the script MUST NOT collect personal identity information (PII) by default
 - **AND** user behavior data MUST be anonymized
 - **AND** the integration MUST comply with Microsoft Clarity's privacy standards
 - **AND** no additional cookies MUST be required for basic functionality
+
+#### Scenario: Clarity content region attribution
+
+- **GIVEN** the DocItem component has been swizzled to add region attributes
+- **WHEN** a documentation page is rendered
+- **THEN** the main article content MUST include a `data-clarity-region="article"` attribute
+- **AND** the attribute MUST be applied to the primary content container element
+- **AND** Clarity MUST be able to distinguish user behavior within the article region from other page regions
+
+#### Scenario: Content region attribution is validated
+
+- **GIVEN** the swizzled DocItem component is deployed
+- **WHEN** a developer inspects the page HTML using browser developer tools
+- **THEN** the `data-clarity-region="article"` attribute MUST be visible on the main content wrapper
+- **AND** the attribute MUST NOT cause any HTML validation errors
+- **AND** the attribute MUST not affect the visual rendering or styling of the page
+
+#### Scenario: Legacy docusaurus.config.ts scripts configuration is removed
+
+- **GIVEN** the Clarity script has been migrated to component-level injection
+- **WHEN** the `docusaurus.config.ts` file is examined
+- **THEN** the `scripts` array MUST NOT contain Clarity-related entries
+- **AND** the `CLARITY_PROJECT_ID` constant MUST NOT be defined in the config file
+- **AND** the configuration MUST remain valid for Docusaurus
 
 ### Requirement: Docker Compose Deployment Documentation
 
@@ -1788,4 +1812,166 @@ QQ group links MUST meet web accessibility standards to ensure users with disabi
 - **THEN** all text in the card SHALL meet WCAG AA contrast requirements (4.5:1 for normal text)
 - **AND** the card SHALL be readable in both light and dark themes
 - **AND** color SHALL NOT be the only means of conveying the card's interactive nature
+
+### Requirement: Bilibili Video Player Component
+
+The homepage MUST include a Bilibili video player component that displays the "每天哈基半小时，AI多任务编程实战" demonstration video with proper responsive design and theme support.
+
+#### Scenario: Video player displays on homepage
+
+- **GIVEN** a user navigates to the homepage
+- **WHEN** the page loads completely
+- **THEN** a Bilibili video player section SHALL be displayed on the homepage
+- **AND** the section SHALL include a title "编程实战演示视频"
+- **AND** the section SHALL include a description "观看《每天哈基半小时，AI多任务编程实战》"
+- **AND** a Bilibili embedded player SHALL be displayed in a responsive container
+
+#### Scenario: Bilibili player loads with correct video
+
+- **GIVEN** the Bilibili video player component is rendered
+- **WHEN** the component initializes
+- **THEN** the player SHALL load video with bvid `BV1pirZBuEzq`
+- **AND** the player SHALL load video part 1 (`p=1`)
+- **AND** the player SHALL use external embed mode (`isOutside=true`)
+- **AND** the player SHALL support fullscreen viewing
+
+#### Scenario: Video player matches homepage design
+
+- **GIVEN** the Bilibili video player component is rendered
+- **WHEN** comparing the video player to other homepage sections
+- **THEN** the video player SHALL use the same gradient border effect as other cards
+- **AND** the video player SHALL have the same border-radius (24px)
+- **AND** the video player SHALL use the same shadow effects (`var(--pc-card-shadow)`)
+- **AND** the section title SHALL use the same gradient text effect
+
+#### Scenario: Video player is responsive
+
+- **GIVEN** the Bilibili video player is displayed
+- **WHEN** viewed on different screen sizes
+- **THEN** on desktop (>1024px) the video container SHALL have a max-width of 900px
+- **AND** on tablet (768px-1024px) the video container SHALL have a max-width of 700px
+- **AND** on mobile (<768px) the video container SHALL span the full width with 1rem padding
+- **AND** the video SHALL maintain a 16:9 aspect ratio at all screen sizes
+
+#### Scenario: Video player respects theme changes
+
+- **GIVEN** a user is viewing the homepage
+- **WHEN** the user switches between light and dark themes
+- **THEN** the video player container SHALL update to match the new theme
+- **AND** the video player SHALL use CSS variables for colors
+- **AND** no hardcoded colors SHALL ignore theme settings
+
+#### Scenario: Video player is accessible
+
+- **GIVEN** the Bilibili video player is displayed
+- **WHEN** a user navigates using a keyboard
+- **THEN** the iframe SHALL have a proper title attribute describing the content
+- **AND** the video SHALL be keyboard accessible
+- **AND** the section SHALL have descriptive heading for screen readers
+
+#### Scenario: Bilibili player iframe is properly configured
+
+- **GIVEN** the Bilibili video player component is rendered
+- **WHEN** the iframe is created
+- **THEN** the iframe SHALL use `scrolling="no"`
+- **AND** the iframe SHALL use `border="0"`
+- **AND** the iframe SHALL use `frameborder="no"`
+- **AND** the iframe SHALL use `framespacing="0"`
+- **AND** the iframe SHALL support fullscreen (`allowfullscreen="true"`)
+
+### Requirement: Docker Container User Permission Consistency Documentation
+
+The Docker Compose deployment documentation MUST include a comprehensive "User Permission Management" section that explains container-to-host user ID mapping issues and provides actionable solutions.
+
+#### Scenario: User encounters permission issues with mounted volumes
+
+- **GIVEN** the user has deployed Hagicode using Docker Compose
+- **AND** the user is using the root account on the host machine
+- **WHEN** the Hagicode container attempts to write files to the mounted volume
+- **THEN** permission errors MAY occur if the container's non-root user cannot write to host-owned files
+- **AND** the documentation MUST explain this is caused by user ID mismatch between container and host
+
+#### Scenario: User accesses user permission management section
+
+- **GIVEN** the user is reading the Docker Compose deployment guide
+- **WHEN** the user navigates to the "User Permission Management" section
+- **THEN** the section MUST be located after the "Configuration Details" section
+- **AND** the section MUST include:
+  - Why user permissions matter
+  - Solution 1: User ID mapping configuration (recommended)
+  - Solution 2: Permission settings (quick but less secure)
+  - Troubleshooting common permission issues
+
+#### Scenario: User understands the root cause of permission issues
+
+- **GIVEN** the user is experiencing permission problems
+- **WHEN** the user reads the "Why User Permissions Matter" subsection
+- **THEN** the documentation MUST explain:
+  - Docker container user IDs are generated via Hash Code
+  - Host container users (root) may not match container non-root users
+  - This causes permission inconsistencies for mounted volumes
+- **AND** the explanation MUST be written in clear Chinese
+- **AND** technical terms MUST be preserved in English where appropriate
+
+#### Scenario: User implements Solution 1 (User ID Mapping)
+
+- **GIVEN** the user has chosen to use the recommended User ID Mapping solution
+- **WHEN** the user follows the step-by-step instructions
+- **THEN** the documentation MUST provide:
+  1. Instructions to obtain the host user ID and group ID: `id username`
+  2. Docker Compose configuration example with `PUID` and `PGID` environment variables
+  3. Container restart command: `docker compose restart hagicode`
+  4. Verification steps to confirm the configuration works
+- **AND** the documentation MUST indicate this is the RECOMMENDED solution
+- **AND** the documentation MUST explain this solution is more secure and suitable for production
+
+#### Scenario: User implements Solution 2 (Permission Settings)
+
+- **GIVEN** the user has chosen to use the Permission Settings solution for quick setup
+- **WHEN** the user follows the step-by-step instructions
+- **THEN** the documentation MUST provide:
+  1. Instructions to create the working directory with root: `sudo mkdir -p /path/to/repos`
+  2. Command to set directory permissions to 777: `sudo chmod 777 /path/to/repos`
+  3. Verification command: `ls -la /path/to/repos`
+- **AND** the documentation MUST indicate this is a QUICK but LESS SECURE solution
+- **AND** the documentation MUST warn about security risks of 777 permissions
+- **AND** the documentation MUST specify this is suitable for development environments only
+
+#### Scenario: User troubleshoots permission issues
+
+- **GIVEN** the user is experiencing permission-related errors
+- **WHEN** the user reads the "Troubleshooting" subsection
+- **THEN** the documentation MUST include a table of common issues with:
+  - Problem symptoms (e.g., "Container cannot write files")
+  - Possible causes (e.g., "User ID mismatch")
+  - Solutions (e.g., "Configure PUID/PGID or set directory permissions")
+- **AND** the documentation MUST provide diagnostic commands:
+  - Check host file permissions: `ls -la /path/to/repos`
+  - Check container user: `docker exec hagicode-app id`
+  - Check container file permissions: `docker exec hagicode-app ls -la /app/workdir`
+
+#### Scenario: User sees PUID/PGID in docker-compose.yml example
+
+- **GIVEN** the user is viewing the example docker-compose.yml file
+- **WHEN** the user examines the hagicode service environment variables
+- **THEN** the example MUST include commented `PUID` and `PGID` environment variables
+- **AND** comments MUST explain the purpose of these variables
+- **AND** comments MUST reference the User Permission Management section for details
+- **EXAMPLE**:
+  ```yaml
+  environment:
+    # User and group IDs for file permissions
+    # See User Permission Management section for details
+    - PUID=1000
+    - PGID=1000
+  ```
+
+#### Scenario: Documentation maintains consistency with existing style
+
+- **GIVEN** the Docker Compose deployment guide already exists
+- **WHEN** the new User Permission Management section is added
+- **THEN** the section MUST use the same markdown formatting conventions
+- **AND** the section MUST follow the same Chinese terminology style
+- **AND** code blocks MUST use appropriate syntax highlighting (bash, yaml)
+- **AND** the section MUST integrate seamlessly with existing content
 

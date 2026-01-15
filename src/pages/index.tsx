@@ -5,6 +5,7 @@ import FeaturesShowcase from '../components/home/FeaturesShowcase';
 import VideoPlayer from '../components/home/VideoPlayer';
 import ShowcaseSection from '../components/home/ShowcaseSection';
 import QuickStartSection from '../components/home/QuickStartSection';
+import BilibiliVideo from '../theme/BilibiliVideo';
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
@@ -14,6 +15,7 @@ export default function Home(): JSX.Element {
         <HeroSection />
         <FeaturesShowcase />
         <VideoPlayer />
+        <BilibiliVideo />
         <ShowcaseSection />
         <QuickStartSection />
       </main>

@@ -79,6 +79,11 @@ services:
       TZ: Asia/Shanghai
       ConnectionStrings__Default: "Host=postgres;Port=5432;Database=hagicode;Username=postgres;Password=postgres"
       License__Activation__LicenseKey: "${HAGICODE_LICENSE_KEY:-D76B5C-EC0A70-AEA453-BC9414-0A198D-V3}"
+      # 用户和组 ID 配置（用于文件权限管理）
+      # 详细说明请参考"用户权限管理"章节
+      # 将 1000 替换为您在宿主机的实际用户 ID 和组 ID
+      # - PUID=1000
+      # - PGID=1000
       # 智谱 AI API Key（必须配置 - 容器部署必需）
       # 取消注释并设置您的密钥
       # 购买链接：https://www.bigmodel.cn/claude-code?ic=14BY54APZA
@@ -318,6 +323,175 @@ ports:
   - "45001:5000"  # 使用 45001 代替 45000
 ```
 :::
+
+## 用户权限管理
+
+### 为什么需要关注用户权限
+
+在使用 Docker Compose 部署 Hagicode 时，容器内外用户权限的映射是一个重要的问题。如果不正确配置，可能会导致文件读写权限冲突。
+
+**问题根源**：
+
+- **用户 ID 映射不匹配**：Docker 容器内的用户 ID 是通过 Hash Code 生成的，与宿主机的用户 ID 可能不一致
+- **文件权限冲突**：当使用 root 用户在宿主机创建目录并挂载到容器时，容器内的非 root 用户可能无法读写这些文件
+- **权限不一致导致的问题**：
+  - 容器内应用无法修改挂载目录中的文件
+  - 容器内创建的文件在宿主机上显示为不同所有者
+  - 影响正常的文件读写操作和开发体验
+
+### 方案一：用户 ID 映射配置（推荐）
+
+这是最安全和推荐的解决方案。通过配置环境变量 `PUID` 和 `PGID`，可以让容器内的进程以指定的用户 ID 和组 ID 运行，从而与宿主机的用户权限保持一致。
+
+**配置步骤**：
+
+1. **获取宿主机用户 ID 和组 ID**
+
+在宿主机上运行以下命令：
+
+```bash
+id username
+```
+
+将 `username` 替换为您的实际用户名。如果使用 root 用户操作，可以创建一个非 root 用户：
+
+```bash
+# 创建新用户（如果需要）
+sudo useradd -m -s /bin/bash hagicode
+# 获取用户 ID
+id hagicode
+```
+
+输出示例：
+```
+uid=1000(hagicode) gid=1000(hagicode) groups=1000(hagicode)
+```
+
+记下 `uid` 和 `gid` 的值（示例中为 1000）。
+
+2. **配置 docker-compose.yml**
+
+在 `docker-compose.yml` 的 `environment` 部分添加 `PUID` 和 `PGID` 环境变量：
+
+```yaml
+services:
+  hagicode:
+    environment:
+      # 用户和组 ID 配置（用于文件权限管理）
+      # 请将 1000 替换为您在宿主机的实际用户 ID 和组 ID
+      - PUID=1000
+      - PGID=1000
+```
+
+3. **重启容器使配置生效**
+
+```bash
+docker compose restart hagicode
+```
+
+4. **验证配置**
+
+检查容器内用户是否正确配置：
+
+```bash
+docker exec hagicode-app id
+```
+
+应该显示您配置的用户 ID 和组 ID。
+
+**适用场景**：
+- 宿主机使用 root 用户操作
+- 需要安全的权限配置
+- 生产环境部署
+
+**优点**：
+- 安全性高，符合最小权限原则
+- 文件权限清晰，易于管理
+- 适用于多用户环境
+
+**缺点**：
+- 需要额外配置步骤
+- 需要了解用户 ID 和组 ID
+
+### 方案二：权限设置
+
+这是一个快速但不够安全的解决方案。通过直接设置目录权限为 777，允许所有用户读写，但不推荐用于生产环境。
+
+:::warning 安全警告
+此方案仅适用于开发环境和测试环境。在生产环境中使用 777 权限存在安全风险，任何用户都可以读写目录中的文件。
+:::
+
+**操作步骤**：
+
+1. **使用 root 创建工作目录**
+
+```bash
+sudo mkdir -p /path/to/repos
+```
+
+2. **设置目录权限为 777**
+
+```bash
+sudo chmod 777 /path/to/repos
+```
+
+3. **验证权限**
+
+```bash
+ls -la /path/to/repos
+```
+
+输出示例：
+```
+drwxrwxrwx 2 root root 4096 Jan 15 10:00 .
+```
+
+**适用场景**：
+- 开发环境
+- 单用户环境
+- 需要快速解决权限问题
+
+**优点**：
+- 操作简单，快速解决
+- 无需修改 Docker 配置
+
+**缺点**：
+- 安全性较低，任何用户都可以读写
+- 不适合生产环境
+- 多用户环境可能存在风险
+
+### 故障排除
+
+以下是常见的权限问题及解决方法：
+
+| 问题现象 | 可能原因 | 解决方案 |
+|---------|---------|---------|
+| 容器内无法写文件 | 用户 ID 不匹配 | 配置 PUID/PGID 或设置目录权限 |
+| 容器内创建的文件宿主机无法访问 | 所有者 ID 不一致 | 使用方案一配置用户 ID 映射 |
+| Permission denied 错误 | 文件或目录权限不足 | 检查并修改文件/目录权限 |
+
+**诊断命令**：
+
+```bash
+# 检查宿主机文件权限
+ls -la /path/to/repos
+
+# 检查容器内用户
+docker exec hagicode-app id
+
+# 检查容器内文件权限
+docker exec hagicode-app ls -la /app/workdir
+
+# 测试容器内文件写入
+docker exec hagicode-app touch /app/workdir/test.txt
+```
+
+**预防权限问题的最佳实践**：
+
+1. 优先使用方案一（用户 ID 映射配置）
+2. 在宿主机上使用专用的非 root 用户运行 Hagicode
+3. 避免在生产环境使用 777 权限
+4. 定期检查挂载目录的文件权限
 
 ## 访问应用
 
