@@ -13,6 +13,20 @@ type HostOS = 'windows' | 'linux';
 type LicenseKeyType = 'public' | 'custom';
 type VolumeType = 'named' | 'bind';
 
+/**
+ * Anthropic API 提供商类型
+ * 统一使用 ANTHROPIC_AUTH_TOKEN 环境变量
+ * 不同提供商通过 ANTHROPIC_URL 区分
+ *
+ * - anthropic: Anthropic 官方 API (仅需 ANTHROPIC_AUTH_TOKEN)
+ * - zai: 智谱 AI (使用 ANTHROPIC_AUTH_TOKEN + 预设的 ANTHROPIC_URL)
+ * - custom: 自定义 API (使用 ANTHROPIC_AUTH_TOKEN + ANTHROPIC_URL)
+ */
+type AnthropicApiProvider = 'anthropic' | 'zai' | 'custom';
+
+// ZAI API URL 常量
+const ZAI_API_URL = 'https://open.bigmodel.cn/api/anthropic';
+
 interface DockerComposeConfig {
   // Basic settings
   httpPort: string;
@@ -38,7 +52,14 @@ interface DockerComposeConfig {
   // API Keys
   licenseKeyType: LicenseKeyType;
   licenseKey: string;
-  zaiApiKey: string;
+
+  // Anthropic API Configuration
+  /** Anthropic API 提供商选择 */
+  anthropicApiProvider: AnthropicApiProvider;
+  /** Anthropic API Token (所有提供商都使用此字段) */
+  anthropicAuthToken: string;
+  /** API Endpoint URL (zai/custom 提供商使用) */
+  anthropicUrl: string;
 
   // Volume mounts
   workdirPath: string;
@@ -68,7 +89,10 @@ const defaultConfig: DockerComposeConfig = {
   volumeName: 'postgres-data',
   licenseKeyType: 'public',
   licenseKey: 'D76B5C-EC0A70-AEA453-BC9414-0A198D-V3',
-  zaiApiKey: '',
+  // Anthropic API Configuration (默认使用智谱 AI)
+  anthropicApiProvider: 'zai',
+  anthropicAuthToken: '',
+  anthropicUrl: '',
   workdirPath: '',
   workdirCreatedByRoot: false,
   puid: '1000',
@@ -113,7 +137,43 @@ function generateYAML(config: DockerComposeConfig): string {
     lines.push(`      PGID: ${config.pgid}`);
   }
 
-  lines.push(`      ZAI_API_KEY: "${config.zaiApiKey}"`);
+  // Claude API Configuration - 统一使用 ANTHROPIC_AUTH_TOKEN
+  lines.push('      # ==================================================');
+  lines.push('      # Claude Code Configuration');
+  lines.push('      # All providers use ANTHROPIC_AUTH_TOKEN');
+  lines.push('      # ANTHROPIC_URL is set for ZAI and custom providers');
+  lines.push('      # ==================================================');
+
+  switch (config.anthropicApiProvider) {
+    case 'anthropic':
+      if (config.anthropicAuthToken) {
+        lines.push('      # Anthropic Official API');
+        lines.push(`      ANTHROPIC_AUTH_TOKEN: "${config.anthropicAuthToken}"`);
+        lines.push('      # No ANTHROPIC_URL needed - uses default Anthropic endpoint');
+      }
+      break;
+
+    case 'zai':
+      if (config.anthropicAuthToken) {
+        lines.push('      # 智谱 AI (ZAI) - uses Anthropic-compatible API');
+        lines.push(`      ANTHROPIC_AUTH_TOKEN: "${config.anthropicAuthToken}"`);
+        lines.push(`      ANTHROPIC_URL: "${ZAI_API_URL}"`);
+        lines.push('      # API Provider: 智谱 AI (ZAI)');
+      }
+      break;
+
+    case 'custom':
+      if (config.anthropicAuthToken) {
+        lines.push('      # Custom Anthropic-compatible API');
+        lines.push(`      ANTHROPIC_AUTH_TOKEN: "${config.anthropicAuthToken}"`);
+        if (config.anthropicUrl) {
+          lines.push(`      ANTHROPIC_URL: "${config.anthropicUrl}"`);
+        }
+        lines.push('      # API Provider: Custom Endpoint');
+      }
+      break;
+  }
+
   lines.push('    ports:');
   lines.push(`      - "${config.httpPort}:45000"`);
   lines.push('    volumes:');
@@ -442,8 +502,11 @@ function ConfigForm({ config, onChange }: ConfigFormProps): JSX.Element {
         )}
       </FormSection>
 
-      {/* API Keys */}
-      <FormSection title="API 密钥">
+      {/* Hagicode License Configuration */}
+      <FormSection
+        title="Hagicode 许可证配置"
+        description="配置 Hagicode 软件许可证"
+      >
         <div className={styles.formRow}>
           <FormField
             label="License Key 类型"
@@ -464,23 +527,112 @@ function ConfigForm({ config, onChange }: ConfigFormProps): JSX.Element {
             />
           )}
         </div>
-        <FormField
-          label="智谱 AI API Key"
-          type="text"
-          value={config.zaiApiKey}
-          onChange={(v) => updateConfig('zaiApiKey', v)}
-          placeholder="请输入您的智谱 AI API Key"
-          required
-        />
-        <div className={styles.zaiLink}>
-          <a
-            href="https://www.bigmodel.cn/claude-code?ic=14BY54APZA"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            获取智谱 AI API Key →
-          </a>
+      </FormSection>
+
+      {/* Claude API Configuration */}
+      <FormSection
+        title="Claude API 配置"
+        description="统一使用 ANTHROPIC_AUTH_TOKEN 环境变量"
+      >
+        <div className={styles.providerRow}>
+          <div className={styles.providerSelectWrapper}>
+            <FormField
+              label="API 提供商"
+              type="select"
+              value={config.anthropicApiProvider}
+              onChange={(v) => updateConfig('anthropicApiProvider', v as AnthropicApiProvider)}
+              options={[
+                { value: 'zai', label: '智谱 AI (ZAI) - 默认选项' },
+                { value: 'anthropic', label: 'Anthropic 官方 API' },
+                { value: 'custom', label: '自定义 API Endpoint' },
+              ]}
+              required
+            />
+          </div>
+          <div className={styles.providerLinkWrapper}>
+            {config.anthropicApiProvider === 'zai' && (
+              <a
+                href="https://www.bigmodel.cn/claude-code?ic=14BY54APZA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.providerLink}
+              >
+                获取 API Token →
+              </a>
+            )}
+            {config.anthropicApiProvider === 'anthropic' && (
+              <a
+                href="https://console.anthropic.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.providerLink}
+              >
+                获取 API Token →
+              </a>
+            )}
+          </div>
         </div>
+
+        {/* 智谱 AI (ZAI) 提供商 */}
+        {config.anthropicApiProvider === 'zai' && (
+          <>
+            <FormField
+              label="API Token"
+              type="text"
+              value={config.anthropicAuthToken}
+              onChange={(v) => updateConfig('anthropicAuthToken', v)}
+              placeholder="请输入您的智谱 AI API Token"
+              required
+            />
+            <div className={styles.providerNote}>
+              <p>API Endpoint 将自动设置为 ZAI API URL: {ZAI_API_URL}</p>
+            </div>
+          </>
+        )}
+
+        {/* Anthropic 官方 API 提供商 */}
+        {config.anthropicApiProvider === 'anthropic' && (
+          <>
+            <FormField
+              label="Anthropic API Token"
+              type="text"
+              value={config.anthropicAuthToken}
+              onChange={(v) => updateConfig('anthropicAuthToken', v)}
+              placeholder="请输入您的 Anthropic API Token (sk-ant-...)"
+              required
+            />
+            <div className={styles.providerNote}>
+              <p>使用 Anthropic 官方 API，无需设置 ANTHROPIC_URL</p>
+            </div>
+          </>
+        )}
+
+        {/* 自定义 API 提供商 */}
+        {config.anthropicApiProvider === 'custom' && (
+          <>
+            <div className={styles.formRow}>
+              <FormField
+                label="API Token"
+                type="text"
+                value={config.anthropicAuthToken}
+                onChange={(v) => updateConfig('anthropicAuthToken', v)}
+                placeholder="请输入您的 API Token"
+                required
+              />
+              <FormField
+                label="API Endpoint URL"
+                type="text"
+                value={config.anthropicUrl}
+                onChange={(v) => updateConfig('anthropicUrl', v)}
+                placeholder="例如：https://api.example.com/v1"
+                required
+              />
+            </div>
+            <div className={styles.providerNote}>
+              <p>使用自定义的 Anthropic 兼容 API 端点</p>
+            </div>
+          </>
+        )}
       </FormSection>
 
       {/* Volume Mounts */}

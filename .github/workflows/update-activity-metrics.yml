@@ -1,0 +1,140 @@
+name: Update Activity Metrics
+
+on:
+  # 定时触发 - 每天 UTC 00:00 运行
+  schedule:
+    - cron: '0 0 * * *'
+
+  # 手动触发用于测试
+  workflow_dispatch:
+
+  # 允许从其他工作流触发
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  NODE_VERSION: '20'
+  DOCKER_HUB_REPOSITORY: 'newbe36524/hagicode'
+
+jobs:
+  update-metrics:
+    name: Fetch and Update Activity Metrics
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Run metrics update script
+        env:
+          CLARITY_API_KEY: ${{ secrets.CLARITY_API_KEY }}
+          HAGICODE_CLARITY_PROJECT_ID: ${{ secrets.HAGICODE_CLARITY_PROJECT_ID }}
+          DOCKER_HUB_REPOSITORY: ${{ env.DOCKER_HUB_REPOSITORY }}
+        run: |
+          npm run update-metrics
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create feature branch
+        id: create-branch
+        run: |
+          BRANCH_NAME="update-activity-metrics-$(date +%s)"
+          git checkout -b "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        run: |
+          git add data/activity-metrics.json
+          git commit -m "chore: update activity metrics data
+
+          - 更新时间: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+      - name: Push branch
+        run: |
+          git push origin "${{ steps.create-branch.outputs.branch_name }}"
+
+      - name: Close previous activity metrics PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 查找并关闭之前的同类 PR
+          PREVIOUS_PRS=$(gh pr list \
+            --search "chore: update activity metrics data in:head" \
+            --state open \
+            --json number \
+            --jq '.[].number')
+
+          if [ -n "$PREVIOUS_PRS" ]; then
+            echo "$PREVIOUS_PRS" | while read -r pr_number; do
+              echo "Closing previous PR #$pr_number"
+              gh pr close "$pr_number" \
+                --comment "由于新的指标更新 PR 自动关闭"
+            done
+          else
+            echo "No previous activity metrics PRs found"
+          fi
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 读取最新的指标数据用于 PR 描述
+          PULL_COUNT=$(jq -r '.dockerHub.pullCount' data/activity-metrics.json)
+          ACTIVE_USERS=$(jq -r '.clarity.activeUsers' data/activity-metrics.json)
+          ACTIVE_SESSIONS=$(jq -r '.clarity.activeSessions' data/activity-metrics.json)
+          LAST_UPDATED=$(jq -r '.lastUpdated' data/activity-metrics.json)
+
+          PR_BODY="## 活动指标更新
+
+          ### 摘要
+          此 PR 更新首页的活动指标数据。
+
+          ### 指标数据
+          | 指标 | 数值 |
+          |------|------|
+          | Docker Hub 拉取次数 | $PULL_COUNT |
+          | 活跃用户 (近3天) | $ACTIVE_USERS |
+          | 活跃会话 (近3天) | $ACTIVE_SESSIONS |
+          | 更新时间 | $LAST_UPDATED |
+
+          ### 变更
+          - 更新 \`data/activity-metrics.json\` 为最新指标
+
+          ### 自动化
+          此 PR 由 [Update Activity Metrics](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) 工作流自动创建。"
+
+          gh pr create \
+            --title "chore: update activity metrics data" \
+            --body "$PR_BODY" \
+            --base main \
+            --head "${{ steps.create-branch.outputs.branch_name }}" \
+            --label "automation,metrics"
+
+      - name: Summary
+        run: |
+          PULL_COUNT=$(jq -r '.dockerHub.pullCount' data/activity-metrics.json)
+          ACTIVE_USERS=$(jq -r '.clarity.activeUsers' data/activity-metrics.json)
+          ACTIVE_SESSIONS=$(jq -r '.clarity.activeSessions' data/activity-metrics.json)
+          LAST_UPDATED=$(jq -r '.lastUpdated' data/activity-metrics.json)
+
+          echo "### 活动指标更新 :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| 指标 | 数值 |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Docker Hub 拉取次数 | $PULL_COUNT |" >> $GITHUB_STEP_SUMMARY
+          echo "| 活跃用户 (近3天) | $ACTIVE_USERS |" >> $GITHUB_STEP_SUMMARY
+          echo "| 活跃会话 (近3天) | $ACTIVE_SESSIONS |" >> $GITHUB_STEP_SUMMARY
+          echo "| 更新时间 | $LAST_UPDATED |" >> $GITHUB_STEP_SUMMARY
