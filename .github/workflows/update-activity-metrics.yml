@@ -183,11 +183,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Create feature branch
-        id: create-branch
         run: |
-          BRANCH_NAME="update-activity-metrics-$(date +%s)"
+          # 使用固定分支名称,避免创建多个临时分支
+          BRANCH_NAME="metrics-update"
           git checkout -b "$BRANCH_NAME"
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "Created branch: $BRANCH_NAME"
 
       - name: Commit changes
         run: |
@@ -196,9 +196,20 @@ jobs:
 
           - 更新时间: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
+      - name: Delete remote branch if exists
+        run: |
+          # 检查远程分支是否存在,如果存在则删除
+          if git ls-remote --heads origin metrics-update | grep -q "metrics-update"; then
+            echo "Deleting existing remote branch metrics-update"
+            git push origin --delete metrics-update
+          else
+            echo "Remote branch metrics-update does not exist"
+          fi
+
       - name: Push branch
         run: |
-          git push origin "${{ steps.create-branch.outputs.branch_name }}"
+          # 使用 --force-with-lease 安全地强制推送,完全替换远程分支内容
+          git push origin metrics-update --force-with-lease
 
       - name: Close previous activity metrics PRs
         env:
@@ -264,7 +275,7 @@ jobs:
             --title "chore: update activity metrics data" \
             --body "$PR_BODY" \
             --base main \
-            --head "${{ steps.create-branch.outputs.branch_name }}" \
+            --head "metrics-update" \
             --label "automation,metrics"
 
       - name: Summary
