@@ -11,8 +11,12 @@ import TabItem from '@theme/TabItem';
 
 本指南介绍如何使用 Docker Compose 一键部署完整的 Hagicode 系统。这是**推荐的部署方式**，适合大多数用户，特别是开发、测试和生产环境。
 
+:::note Docker Compose Builder
+Docker Compose Builder 现在作为独立工具提供，地址：[https://hagicode-org.github.io/docker-compose-builder/](https://hagicode-org.github.io/docker-compose-builder/)。它提供相同的功能，并定期更新和改进用户体验。
+:::
+
 :::info 使用配置生成器
-**推荐使用我们的 [交互式 Docker Compose 配置生成器](/docker-compose-generator)**！
+**推荐使用 [Docker Compose Builder (独立站点)](https://hagicode-org.github.io/docker-compose-builder/)**！
 
 通过简单的表单填写，即可快速生成符合您需求的 `docker-compose.yml` 配置文件。生成器支持：
 - 自定义端口、容器名称等基础配置
@@ -21,7 +25,7 @@ import TabItem from '@theme/TabItem';
 - 智能处理文件权限问题
 - **镜像源选择**：支持 Docker Hub（默认）和 Azure Container Registry (ACR) 镜像源
 
-[🚀 立即使用生成器 →](/docker-compose-generator)
+[🚀 立即使用生成器 →](https://hagicode-org.github.io/docker-compose-builder/)
 :::
 
 :::tip 推荐方式
@@ -80,7 +84,7 @@ docker compose version
 ### 1. 生成 Docker Compose 配置文件
 
 :::tip 使用配置生成器
-**推荐使用我们的 [交互式 Docker Compose 配置生成器](/docker-compose-generator)** 来生成您的配置文件。
+**推荐使用 [Docker Compose Builder (独立站点)](https://hagicode-org.github.io/docker-compose-builder/)** 来生成您的配置文件。
 
 生成器支持：
 - 多种 API 提供商选择（智谱 AI、Anthropic 官方、自定义 API）
@@ -90,10 +94,10 @@ docker compose version
 - 自动配置 Windows/Linux 平台差异
 - 智能处理文件权限问题
 
-[🚀 立即使用生成器 →](/docker-compose-generator)
+[🚀 立即使用生成器 →](https://hagicode-org.github.io/docker-compose-builder/)
 :::
 
-1. 打开 [Docker Compose 配置生成器](/docker-compose-generator)
+1. 打开 [Docker Compose Builder (独立站点)](https://hagicode-org.github.io/docker-compose-builder/)
 2. 根据您的需求填写配置：
    - 选择 API 提供商（智谱 AI、Anthropic 官方或自定义）
    - 配置端口、数据库、工作目录等选项
@@ -177,7 +181,7 @@ docker compose logs -f hagicode
 
 如需修改配置（如更改端口、切换 API 提供商等），您可以：
 
-1. 重新使用 [Docker Compose 配置生成器](/docker-compose-generator) 生成新配置
+1. 重新使用 [Docker Compose Builder (独立站点)](https://hagicode-org.github.io/docker-compose-builder/) 生成新配置
 2. 手动编辑 `docker-compose.yml` 和 `.env` 文件
 3. 重启服务使配置生效：
 

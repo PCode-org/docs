@@ -80,7 +80,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          to: '/docker-compose-generator',
+          href: 'https://hagicode-org.github.io/docker-compose-builder/',
           label: 'Docker Compose 生成器',
           position: 'right',
         },
@@ -103,6 +103,15 @@ const config: Config = {
             {
               label: 'QQ技术支持群 (610394020)',
               href: 'https://qm.qq.com/q/Wk6twXHdyS',
+            },
+          ],
+        },
+        {
+          title: 'Tools',
+          items: [
+            {
+              label: 'Docker Compose Builder',
+              href: 'https://hagicode-org.github.io/docker-compose-builder/',
             },
           ],
         },
