@@ -22,7 +22,7 @@ jobs:
         run: |
           # 下载 image-syncer 二进制文件
           wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
-          tar -zxvf image-syncer-linux-amd64.tar.gz
+          tar -zxvf image-syncer-v1.5.5-linux-amd64.tar.gz
           chmod +x image-syncer
 
       - name: Create image-syncer config
