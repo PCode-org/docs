@@ -19,6 +19,7 @@ import TabItem from '@theme/TabItem';
 - 选择内置数据库或外部数据库
 - 自动配置 Windows/Linux 平台差异
 - 智能处理文件权限问题
+- **镜像源选择**：支持 Docker Hub（默认）和 Azure Container Registry (ACR) 镜像源
 
 [🚀 立即使用生成器 →](/docker-compose-generator)
 :::
@@ -96,9 +97,33 @@ docker compose version
 2. 根据您的需求填写配置：
    - 选择 API 提供商（智谱 AI、Anthropic 官方或自定义）
    - 配置端口、数据库、工作目录等选项
+   - **选择镜像源**：根据您的网络环境选择合适的镜像源
 3. 点击生成按钮，获取 `docker-compose.yml` 配置
 4. 将生成的配置保存为 `docker-compose.yml` 文件
 5. 如果需要，创建 `.env` 文件配置敏感信息
+
+#### 镜像源选择
+
+生成器支持两个镜像源选项：
+
+**Docker Hub（推荐）**
+- **镜像地址**：`newbe36524/hagicode:{tag}`
+- **适用场景**：适合支持 Docker Hub 镜像加速的用户
+- **优点**：官方镜像源，更新及时，访问稳定
+- **注意事项**：部分地区可能需要配置镜像加速器
+
+**Azure Container Registry (ACR)**
+- **镜像地址**：`hagicode.azurecr.io/hagicode:{tag}`
+- **适用场景**：适合本地网络无法访问 Docker Hub 的用户
+- **优点**：提供备选镜像源，解决网络访问问题
+- **注意事项**：镜像与 Docker Hub 保持同步，但可能存在短暂延迟
+
+:::tip 镜像源选择建议
+- **首选 Docker Hub**：如果您的网络环境可以访问 Docker Hub，建议优先使用 Docker Hub 镜像源
+- **备选 ACR**：仅在 Docker Hub 访问困难或不稳定时，选择 ACR 镜像源
+- **镜像同步**：ACR 镜像与 Docker Hub 保持同步，通常延迟在 1 小时内
+- **版本一致性**：两个镜像源的镜像标签保持一致，不用担心版本问题
+:::
 
 :::info 获取 API Token
 您需要配置 Claude API Token 才能使用 Hagicode：

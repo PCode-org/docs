@@ -119,6 +119,9 @@ const config: Config = {
       },
     },
   },
+  clientModules: [
+    './src/client/index.tsx',
+  ],
 };
 
 export default config;

@@ -12,6 +12,7 @@ type DatabaseType = 'internal' | 'external';
 type HostOS = 'windows' | 'linux';
 type LicenseKeyType = 'public' | 'custom';
 type VolumeType = 'named' | 'bind';
+type ImageRegistry = 'docker-hub' | 'azure-acr';
 
 /**
  * Anthropic API 提供商类型
@@ -27,12 +28,47 @@ type AnthropicApiProvider = 'anthropic' | 'zai' | 'custom';
 // ZAI API URL 常量
 const ZAI_API_URL = 'https://open.bigmodel.cn/api/anthropic';
 
+/**
+ * 镜像源配置接口
+ */
+interface RegistryConfig {
+  id: ImageRegistry;
+  name: string;
+  description: string;
+  imagePrefix: string;
+  recommended: boolean;
+  networkAdvice: string;
+}
+
+/**
+ * 镜像源配置常量
+ */
+const REGISTRIES: Record<ImageRegistry, RegistryConfig> = {
+  'docker-hub': {
+    id: 'docker-hub',
+    name: 'Docker Hub',
+    description: 'Docker 官方镜像源，推荐使用',
+    imagePrefix: 'newbe36524/hagicode',
+    recommended: true,
+    networkAdvice: '适合支持 Docker Hub 镜像加速的用户'
+  },
+  'azure-acr': {
+    id: 'azure-acr',
+    name: 'Azure Container Registry',
+    description: '备选镜像源，与 Docker Hub 保持同步',
+    imagePrefix: 'hagicode.azurecr.io/hagicode',
+    recommended: false,
+    networkAdvice: '适合本地网络无法访问 Docker Hub 的用户'
+  }
+};
+
 interface DockerComposeConfig {
   // Basic settings
   httpPort: string;
   containerName: string;
   imageTag: string;
   hostOS: HostOS;
+  imageRegistry: ImageRegistry;
 
   // Environment (fixed)
   aspNetEnvironment: 'Production';
@@ -79,6 +115,7 @@ const defaultConfig: DockerComposeConfig = {
   containerName: 'hagicode-app',
   imageTag: 'latest',
   hostOS: 'windows',
+  imageRegistry: 'docker-hub',
   aspNetEnvironment: 'Production',
   timezone: 'Asia/Shanghai',
   databaseType: 'internal',
@@ -115,7 +152,8 @@ function generateYAML(config: DockerComposeConfig): string {
   // Services section
   lines.push('services:');
   lines.push('  hagicode:');
-  lines.push(`    image: newbe36524/hagicode:${config.imageTag}`);
+  const imagePrefix = REGISTRIES[config.imageRegistry].imagePrefix;
+  lines.push(`    image: ${imagePrefix}:${config.imageTag}`);
   lines.push(`    container_name: ${config.containerName}`);
   lines.push('    environment:');
   lines.push(`      ASPNETCORE_ENVIRONMENT: ${config.aspNetEnvironment}`);
@@ -380,6 +418,33 @@ function ConfigForm({ config, onChange }: ConfigFormProps): JSX.Element {
             ]}
           />
         </div>
+        <div className={styles.formRow}>
+          <FormField
+            label="镜像源"
+            type="select"
+            value={config.imageRegistry}
+            onChange={(v) => updateConfig('imageRegistry', v as ImageRegistry)}
+            options={[
+              { value: 'docker-hub', label: 'Docker Hub（推荐）' },
+              { value: 'azure-acr', label: 'Azure Container Registry' },
+            ]}
+            required
+          />
+        </div>
+        {config.imageRegistry === 'docker-hub' && (
+          <div className={styles.providerNote}>
+            <p><strong>✓ Docker 官方镜像源</strong></p>
+            <p>{REGISTRIES['docker-hub'].networkAdvice}</p>
+          </div>
+        )}
+        {config.imageRegistry === 'azure-acr' && (
+          <div className={styles.providerNote}>
+            <p><strong>ℹ️ 备选镜像源</strong></p>
+            <p>{REGISTRIES['azure-acr'].description}</p>
+            <p>{REGISTRIES['azure-acr'].networkAdvice}</p>
+            <p>镜像地址: {REGISTRIES['azure-acr'].imagePrefix}:{config.imageTag}</p>
+          </div>
+        )}
       </FormSection>
 
       {/* Database Configuration */}
@@ -775,7 +840,28 @@ function ConfigPreview({ yaml, onCopy, copied }: ConfigPreviewProps): JSX.Elemen
 // ============================================================================
 
 export default function DockerComposeGenerator(): JSX.Element {
-  const [config, setConfig] = useState<DockerComposeConfig>(defaultConfig);
+  // 从 LocalStorage 读取保存的镜像源选择
+  const getInitialConfig = (): DockerComposeConfig => {
+    // 在服务器端渲染时不访问 LocalStorage
+    if (typeof window === 'undefined') {
+      return defaultConfig;
+    }
+
+    try {
+      const savedRegistry = localStorage.getItem('docker-compose-image-registry');
+      if (savedRegistry && (savedRegistry === 'docker-hub' || savedRegistry === 'azure-acr')) {
+        return {
+          ...defaultConfig,
+          imageRegistry: savedRegistry as ImageRegistry
+        };
+      }
+    } catch (error) {
+      console.warn('无法读取 LocalStorage:', error);
+    }
+    return defaultConfig;
+  };
+
+  const [config, setConfig] = useState<DockerComposeConfig>(getInitialConfig);
   const [copied, setCopied] = useState(false);
 
   const yaml = useMemo(() => generateYAML(config), [config]);
@@ -790,6 +876,20 @@ export default function DockerComposeGenerator(): JSX.Element {
     }
   };
 
+  // 保存镜像源选择到 LocalStorage
+  const handleConfigChange = (newConfig: DockerComposeConfig): void => {
+    setConfig(newConfig);
+
+    // 仅在客户端环境保存到 LocalStorage
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('docker-compose-image-registry', newConfig.imageRegistry);
+      } catch (error) {
+        console.warn('无法保存到 LocalStorage:', error);
+      }
+    }
+  };
+
   return (
     <Layout
       title="Docker Compose 生成器"
@@ -798,7 +898,7 @@ export default function DockerComposeGenerator(): JSX.Element {
       <main className={styles.generatorContainer}>
         <div className={styles.generatorLayout}>
           <div className={styles.configPanel}>
-            <ConfigForm config={config} onChange={setConfig} />
+            <ConfigForm config={config} onChange={handleConfigChange} />
           </div>
           <ConfigPreview yaml={yaml} onCopy={handleCopy} copied={copied} />
         </div>

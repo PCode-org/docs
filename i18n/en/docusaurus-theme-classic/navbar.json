@@ -1,10 +1,10 @@
 {
   "title": {
-    "message": "PCode Docs",
+    "message": "Hagicode",
     "description": "The title in the navbar"
   },
   "logo.alt": {
-    "message": "PCode Logo",
+    "message": "Hagicode Logo",
     "description": "The alt text of navbar logo"
   },
   "item.label.Docs": {
