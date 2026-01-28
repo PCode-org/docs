@@ -11,6 +11,33 @@ import TabItem from '@theme/TabItem';
 
 本指南介绍如何使用 Docker Compose 一键部署完整的 Hagicode 系统。这是**推荐的部署方式**，适合大多数用户，特别是开发、测试和生产环境。
 
+## 视频教程
+
+为了帮助您更好地理解 Docker Compose 部署过程，我们提供了详细的视频教程：
+
+<div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '8px', marginBottom: '2rem'}}>
+  <iframe
+    src="https://player.bilibili.com/player.html?bvid=BV19967B6EHr&page=1&high_quality=1&danmaku=0"
+    width="100%"
+    height="100%"
+    scrolling="no"
+    border="0"
+    frameborder="no"
+    framespacing="0"
+    allowfullscreen="true"
+    style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+  >
+  </iframe>
+</div>
+
+**视频内容简介**：
+- Docker Compose 部署的完整流程演示
+- 配置文件生成和修改说明
+- 服务启动和验证步骤
+- 常见问题和解决方案
+
+视频时长：约 15 分钟
+
 :::note Docker Compose Builder
 Docker Compose Builder 现在作为独立工具提供，地址：[https://hagicode-org.github.io/docker-compose-builder/](https://hagicode-org.github.io/docker-compose-builder/)。它提供相同的功能，并定期更新和改进用户体验。
 :::

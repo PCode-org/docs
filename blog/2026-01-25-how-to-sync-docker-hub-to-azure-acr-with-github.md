@@ -1,5 +1,6 @@
 ---
 title: "如何使用 GitHub Actions + image-syncer 实现 Docker Hub 到 Azure ACR 的自动化镜像同步"
+authors: "newbe36524"
 englishSlug: "how-to-sync-docker-hub-to-azure-acr-with-github"
 ---
 

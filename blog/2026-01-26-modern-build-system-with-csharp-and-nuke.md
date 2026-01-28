@@ -1,6 +1,6 @@
 ---
 title: "基于 C# 和 Nuke 打造现代化构建系统的最佳实践"
-author: "newbe36524"
+authors: "newbe36524"
 englishSlug: "modern-build-system-with-csharp-and-nuke"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "GitHub Issues 集成"
+authors: "newbe36524"
 ---
 
 # 从零构建 GitHub Issues 集成：HagiCode 的前端直连实践

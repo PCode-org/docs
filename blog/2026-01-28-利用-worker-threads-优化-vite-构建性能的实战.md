@@ -1,6 +1,6 @@
 ---
 title: "利用 Worker Threads 优化 Vite 构建性能的实战"
-author: "newbe36524"
+authors: "newbe36524"
 ---
 
 # 120秒到45秒：利用 Worker Threads 优化 Vite 构建性能的实战

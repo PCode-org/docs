@@ -1,5 +1,6 @@
 ---
 title: "HagiCode 实践：如何利用 GitHub Actions 实现 Docusaurus 自动部署"
+authors: "newbe36524"
 englishSlug: "docusaurus-auto-deployment-with-github-actions"
 ---
 
