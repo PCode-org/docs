@@ -32,6 +32,14 @@
       "filePath": "blog/2026-01-27-modern-build-system-with-csharp-and-nuke.md",
       "lastSyncedAt": "2026-01-27T00:47:23.246Z",
       "checksum": "6b215d2e"
+    },
+    {
+      "localId": "1769561927939-mtnojue",
+      "title": "利用 Worker Threads 优化 Vite 构建性能的实战",
+      "normalizedTitle": "利用-worker-threads-优化-vite-构建性能的实战",
+      "filePath": "blog/2026-01-28-利用-worker-threads-优化-vite-构建性能的实战.md",
+      "lastSyncedAt": "2026-01-28T00:58:47.939Z",
+      "checksum": "78236a00"
     }
   ]
 }
