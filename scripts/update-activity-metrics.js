@@ -25,11 +25,17 @@
  */
 
 // 加载环境变量（优先从 .env 文件）
-require('dotenv').config();
+import 'dotenv/config';
 
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
+import fs from 'fs';
+import path from 'path';
+import https from 'https';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// ES 模块中的 __filename 和 __dirname 等效实现
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // 配置
 const CONFIG = {
@@ -350,8 +356,8 @@ async function main() {
   return metricsData;
 }
 
-// 执行主函数
-if (require.main === module) {
+// 执行主函数 - ES 模块中使用 process.argv[1] === __filename 检查是否为主模块
+if (process.argv[1] === __filename) {
   main()
     .then(() => {
       process.exit(0);
@@ -366,4 +372,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { main, fetchDockerHubMetrics, fetchClarityMetrics };
+export { main, fetchDockerHubMetrics, fetchClarityMetrics };
