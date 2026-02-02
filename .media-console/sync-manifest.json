@@ -48,6 +48,14 @@
       "filePath": "blog/2026-01-29--streamjsonrpc-integration-in-hagicode-.md",
       "lastSyncedAt": "2026-01-29T00:41:04.776Z",
       "checksum": "7d5bc105"
+    },
+    {
+      "localId": "1769993681863-zm90bnd",
+      "title": "Docusaurus 3.x 到 Astro 5.x 迁移实战：利用 Islands 架构实现性能与构建速度双重提升",
+      "normalizedTitle": "docusaurus-3x-到-astro-5x-迁移实战利用-islands-架构实现性能与构建速度双重提升",
+      "filePath": "src/content/docs/blog/2026-02-02-migrate-docusaurus-to-astro-with-islands-architecture.md",
+      "lastSyncedAt": "2026-02-02T00:54:41.863Z",
+      "checksum": "7f1c0866"
     }
   ]
 }

@@ -36,3 +36,14 @@
   --color-success: #4ADE80;
   --gradient-primary: linear-gradient(135deg, #00D4FF 0%, #00FFFF 50%, #4ADE80 100%);
 }
+
+/* ==========================================================================
+   隐藏 RSS 链接
+   ========================================================================== */
+/* Hide RSS links from sidebar, header and social icons */
+.social-icons a[href*="rss.xml"],
+.sl-sidebar a[href*="rss.xml"],
+a[href*="/blog/rss.xml"],
+a[href*="/site/blog/rss.xml"] {
+  display: none !important;
+}

@@ -4,6 +4,7 @@ import starlightBlog from 'starlight-blog'
 import sitemap from '@astrojs/sitemap';
 
 import partytown from '@astrojs/partytown';
+import robotsTxt from 'astro-robots-txt';
 
 import react from '@astrojs/react';
 import mermaidInjector from './src/integrations/mermaid-injector.ts';
@@ -13,6 +14,8 @@ import rehypeExternalLinks from 'rehype-external-links';
 
 // https://astro.build/config
 export default defineConfig({
+    // 站点完整 URL,用于生成 sitemap 和 canonical URL
+    site: 'https://hagicode-org.github.io/site',
     // 从环境变量读取站点基础路径,默认为 '/' (根路径部署)
     // 可通过 VITE_SITE_BASE 环境变量覆盖
     // 示例: VITE_SITE_BASE=/site 表示子路径部署
@@ -44,39 +47,51 @@ export default defineConfig({
             ),
         },
     },
-    integrations: [starlight({
-        title: 'Hagicode Docs',
-        description: 'Hagicode 项目文档',
-        social: [{ icon: 'github', label: 'GitHub 仓库', href: 'https://github.com/HagiCode-org/site' }],
-        sidebar: [
-            {
-                label: '产品概述',
-                link: '/product-overview',
+    integrations: [
+        // robots.txt 配置 - 使用 astro-robots-txt 插件
+        robotsTxt({
+            sitemap: 'https://hagicode-org.github.io/site/sitemap-index.xml',
+        }),
+        starlight({
+            title: 'Hagicode Docs',
+            description: 'Hagicode 项目文档',
+            social: [{ icon: 'github', label: 'GitHub 仓库', href: 'https://github.com/HagiCode-org/site' }],
+            sidebar: [
+                {
+                    label: '产品概述',
+                    link: '/product-overview',
+                },
+                {
+                    label: '快速开始',
+                    autogenerate: { directory: 'quick-start' },
+                },
+                {
+                    label: '安装指南',
+                    autogenerate: { directory: 'installation' },
+                },
+                {
+                    label: '相关软件安装',
+                    autogenerate: { directory: 'related-software-installation' },
+                },
+            ],
+            customCss: ['./src/styles/starlight-override.css'],
+            editLink: {
+                baseUrl: 'https://github.com/HagiCode-org/site/edit/main/',
             },
-            {
-                label: '快速开始',
-                autogenerate: { directory: 'quick-start' },
+            components: {
+                Header: './src/components/StarlightHeader.astro',
+                Footer: './src/components/StarlightFooter.astro',
             },
-            {
-                label: '安装指南',
-                autogenerate: { directory: 'installation' },
-            },
-            {
-                label: '相关软件安装',
-                autogenerate: { directory: 'related-software-installation' },
-            },
-        ],
-        customCss: ['./src/styles/starlight-override.css'],
-        editLink: {
-            baseUrl: 'https://github.com/HagiCode-org/site/edit/main/',
-        },
-        components: {
-            Header: './src/components/StarlightHeader.astro',
-            Footer: './src/components/StarlightFooter.astro',
-        },
 
-        plugins: [starlightBlog()],
-    }), sitemap(), partytown(), react(), mermaidInjector()],
+            plugins: [starlightBlog({
+                rss: false,
+            })],
+        }),
+        sitemap(),
+        partytown(),
+        react(),
+        mermaidInjector()
+    ],
     // 添加 Mermaid 渲染脚本到所有页面
     scopedStyleStrategy: 'where',
 });
