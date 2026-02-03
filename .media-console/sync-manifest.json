@@ -56,6 +56,14 @@
       "filePath": "src/content/docs/blog/2026-02-02-migrate-docusaurus-to-astro-with-islands-architecture.md",
       "lastSyncedAt": "2026-02-02T00:54:41.863Z",
       "checksum": "7f1c0866"
+    },
+    {
+      "localId": "1770080859251-tch7uif",
+      "title": ".NET Core 双数据库实战：优雅融合 PostgreSQL 与 SQLite 的最佳实践",
+      "normalizedTitle": "net-core-双数据库实战优雅融合-postgresql-与-sqlite-的最佳实践",
+      "filePath": "src/content/docs/blog/2026-02-01-net-core-双数据库实战优雅融合-postgresql-与-sqlite-的最佳实践.md",
+      "lastSyncedAt": "2026-02-03T01:07:39.251Z",
+      "checksum": "4dc02e3c"
     }
   ]
 }
