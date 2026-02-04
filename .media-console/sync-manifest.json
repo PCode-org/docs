@@ -64,6 +64,14 @@
       "filePath": "src/content/docs/blog/2026-02-01-net-core-双数据库实战优雅融合-postgresql-与-sqlite-的最佳实践.md",
       "lastSyncedAt": "2026-02-03T01:07:39.251Z",
       "checksum": "4dc02e3c"
+    },
+    {
+      "localId": "1770167909109-mqgwrqx",
+      "title": "HagiCode 启动页设计：React 19 应用中填补 Hydration 空白期的极致体验",
+      "normalizedTitle": "hagicode-启动页设计react-19-应用中填补-hydration-空白期的极致体验",
+      "filePath": "src/content/docs/blog/2026-02-03-hagicode-react-19-hydration-splash-screen.md",
+      "lastSyncedAt": "2026-02-04T01:18:29.110Z",
+      "checksum": "566dabdd"
     }
   ]
 }
