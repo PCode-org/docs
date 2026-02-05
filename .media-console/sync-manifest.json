@@ -72,6 +72,14 @@
       "filePath": "src/content/docs/blog/2026-02-03-hagicode-react-19-hydration-splash-screen.md",
       "lastSyncedAt": "2026-02-04T01:18:29.110Z",
       "checksum": "566dabdd"
+    },
+    {
+      "localId": "1770253707161-130hhou",
+      "title": "基于 Starlight 文档站点接入 Microsoft Clarity 的完整实践指南",
+      "normalizedTitle": "基于-starlight-文档站点接入-microsoft-clarity-的完整实践指南",
+      "filePath": "src/content/docs/blog/2026-02-04-starlight-docs-integration-microsoft-clarity.md",
+      "lastSyncedAt": "2026-02-05T01:08:27.161Z",
+      "checksum": "58ebd39b"
     }
   ]
 }
