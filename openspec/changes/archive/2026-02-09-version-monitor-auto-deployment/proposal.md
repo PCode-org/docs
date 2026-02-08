@@ -2,7 +2,7 @@
 
 ## Why
 
-当前 Hagicode 文档站点的桌面客户端下载页面需要显示最新的版本信息。版本数据托管在官网的特定 URL（如 `https://hagicode.com/desktop/index.json`）。当桌面客户端发布新版本时，官网的 `index.json` 会被更新，但文档站点不会自动检测到这一变化并触发重新部署。这导致：
+当前 Hagicode 文档站点的桌面客户端下载页面需要显示最新的版本信息。版本数据托管在官网的特定 URL（如 `https://desktop.dl.hagicode.com/index.json`）。当桌面客户端发布新版本时，官网的 `index.json` 会被更新，但文档站点不会自动检测到这一变化并触发重新部署。这导致：
 
 1. **版本同步延迟**：文档站点显示过时的版本信息，直到手动触发新的构建和部署
 2. **手动维护成本**：需要人工监控官网 `index.json` 的变化并手动触发部署流程
@@ -23,7 +23,7 @@
    - 检测到版本变化时创建 Pull Request
 
 2. **版本监控脚本** (`scripts/version-monitor.js`)
-   - 从官网 URL（如 `https://hagicode.com/desktop/index.json`）获取最新版本号
+   - 从官网 URL（如 `https://desktop.dl.hagicode.com/index.json`）获取最新版本号
    - 与存储的基准版本进行比较
    - 检测到变化时创建 Pull Request
 
@@ -42,7 +42,7 @@
 ```mermaid
 flowchart TD
     A[定时触发<br/>GitHub Actions<br/>每30分钟] --> B[执行版本监控脚本]
-    B --> C[从官网 URL 获取 index.json<br/>https://hagicode.com/desktop/index.json]
+    B --> C[从官网 URL 获取 index.json<br/>https://desktop.dl.hagicode.com/index.json]
     C --> D{HTTP 请求成功?}
     D -->|否| E[记录错误日志]
     E --> F[等待下次检查]

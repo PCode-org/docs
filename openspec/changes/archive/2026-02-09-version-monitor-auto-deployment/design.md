@@ -2,7 +2,7 @@
 
 ## Context
 
-Hagicode 文档站点使用 Astro 5.x 框架构建，部署到 GitHub Pages 和 Azure Static Web Apps。桌面客户端的版本数据托管在官网的特定 URL（如 `https://hagicode.com/desktop/index.json`）。当桌面客户端发布新版本时，官网的 `index.json` 会被更新，但文档站点需要手动触发重新部署才能反映最新版本。
+Hagicode 文档站点使用 Astro 5.x 框架构建，部署到 GitHub Pages 和 Azure Static Web Apps。桌面客户端的版本数据托管在官网的特定 URL（如 `https://desktop.dl.hagicode.com/index.json`）。当桌面客户端发布新版本时，官网的 `index.json` 会被更新，但文档站点需要手动触发重新部署才能反映最新版本。
 
 ### 当前痛点
 
@@ -14,7 +14,7 @@ Hagicode 文档站点使用 Astro 5.x 框架构建，部署到 GitHub Pages 和 
 
 - 项目使用 GitHub Actions 进行 CI/CD
 - 部署目标：GitHub Pages 和 Azure Static Web Apps
-- 版本数据源：官网 URL（`https://hagicode.com/desktop/index.json`）
+- 版本数据源：官网 URL（`https://desktop.dl.hagicode.com/index.json`）
 - 需要避免过度频繁的 HTTP 请求
 - 需要处理 HTTP 请求失败的情况
 - 不能影响现有的手动部署流程
@@ -92,7 +92,7 @@ Hagicode 文档站点使用 Astro 5.x 框架构建，部署到 GitHub Pages 和 
   "lastCheckedTime": "2026-02-08T10:00:00Z",
   "lastDeployedVersion": "1.0.0",
   "lastDeployedTime": "2026-02-08T10:00:00Z",
-  "sourceUrl": "https://hagicode.com/desktop/index.json",
+  "sourceUrl": "https://desktop.dl.hagicode.com/index.json",
   "checkCount": 0
 }
 ```
@@ -196,7 +196,7 @@ graph TB
 
 ```mermaid
 flowchart TD
-    A[开始] --> B[HTTP GET 官网 index.json<br/>https://hagicode.com/desktop/index.json]
+    A[开始] --> B[HTTP GET 官网 index.json<br/>https://desktop.dl.hagicode.com/index.json]
     B --> C{HTTP 请求成功?}
     C -->|否| D[记录错误并退出]
     C -->|是| E{状态码 200 OK?}
@@ -397,7 +397,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository }}
-          VERSION_SOURCE_URL: ${{ vars.VERSION_SOURCE_URL || 'https://hagicode.com/desktop/index.json' }}
+          VERSION_SOURCE_URL: ${{ vars.VERSION_SOURCE_URL || 'https://desktop.dl.hagicode.com/index.json' }}
           REQUEST_TIMEOUT: '30000'  # 30 秒超时
           MAX_RETRIES: '3'
 ```
@@ -633,7 +633,7 @@ git push origin main
 1. **官网 URL 确认**
    - 问题：官网 `index.json` 的确切 URL 是什么？
    - 影响：需要正确的 URL 才能获取版本数据
-   - 决策：在实施前需要确认官网 URL（可能是 `https://hagicode.com/desktop/index.json` 或其他）
+   - 决策：在实施前需要确认官网 URL（可能是 `https://desktop.dl.hagicode.com/index.json` 或其他）
 
 2. **版本数据格式确认**
    - 问题：官网 `index.json` 的确切数据结构是什么？

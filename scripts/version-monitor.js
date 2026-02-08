@@ -10,7 +10,7 @@
  * - GITHUB_TOKEN: GitHub token for API calls (automatically provided by GitHub Actions)
  * - REPO_OWNER: Repository owner (e.g., "newbe36524")
  * - REPO_NAME: Repository name (e.g., "pcode-docs")
- * - VERSION_SOURCE_URL: URL to fetch version data (default: https://hagicode.com/desktop/index.json)
+ * - VERSION_SOURCE_URL: URL to fetch version data (default: https://desktop.dl.hagicode.com/index.json)
  * - REQUEST_TIMEOUT: HTTP request timeout in milliseconds (default: 30000)
  * - MAX_RETRIES: Maximum number of retry attempts (default: 3)
  */
@@ -31,7 +31,7 @@ const config = {
   repoOwner: process.env.REPO_OWNER || '',
   repoName: process.env.REPO_NAME || '',
   githubToken: process.env.GITHUB_TOKEN || '',
-  sourceUrl: process.env.VERSION_SOURCE_URL || 'https://hagicode.com/desktop/index.json',
+  sourceUrl: process.env.VERSION_SOURCE_URL || 'https://desktop.dl.hagicode.com/index.json',
   timeout: parseInt(process.env.REQUEST_TIMEOUT || '30000', 10),
   maxRetries: parseInt(process.env.MAX_RETRIES || '3', 10),
   retryDelay: 1000 // Base retry delay in milliseconds

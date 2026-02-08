@@ -162,7 +162,7 @@ The system SHALL support configuration of the version data source URL through en
 
 #### Scenario: Default URL when not configured
 - **WHEN** the `VERSION_SOURCE_URL` repository variable is not set
-- **THEN** the workflow defaults to "https://hagicode.com/desktop/index.json"
+- **THEN** the workflow defaults to "https://desktop.dl.hagicode.com/index.json"
 - **AND** the default URL is logged in the workflow output
 
 #### Scenario: Environment variable overrides default

@@ -3,8 +3,8 @@ name: Version Monitor
 # Trigger the workflow every 30 minutes and allow manual triggering
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Run every 30 minutes
-  workflow_dispatch:        # Allow manual trigger from GitHub Actions UI
+    - cron: "*/30 * * * *" # Run every 30 minutes
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
 
 # Set permissions for creating branches, commits, and pull requests
 permissions:
@@ -25,13 +25,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Display configuration
         run: |
           echo "Version Monitor Configuration"
           echo "=========================="
-          echo "Source URL: ${{ vars.VERSION_SOURCE_URL || 'https://hagicode.com/desktop/index.json' }}"
+          echo "Source URL: ${{ vars.VERSION_SOURCE_URL || 'https://desktop.dl.hagicode.com/index.json' }}"
           echo "Request Timeout: 30000ms"
           echo "Max Retries: 3"
           echo "Repository: ${{ github.repository }}"
@@ -43,9 +43,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
-          VERSION_SOURCE_URL: ${{ vars.VERSION_SOURCE_URL || 'https://hagicode.com/desktop/index.json' }}
-          REQUEST_TIMEOUT: '30000'
-          MAX_RETRIES: '3'
+          VERSION_SOURCE_URL: ${{ vars.VERSION_SOURCE_URL || 'https://desktop.dl.hagicode.com/index.json' }}
+          REQUEST_TIMEOUT: "30000"
+          MAX_RETRIES: "3"
 
       - name: Display result
         if: always()

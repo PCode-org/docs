@@ -2,7 +2,7 @@
 
 ### 1.1 核心组件开发
 - [ ] 1.1.1 创建版本监控脚本 `scripts/version-monitor.js`
-- [ ] 1.1.2 实现从官网 URL 获取版本数据（HTTP GET 请求 `https://hagicode.com/desktop/index.json`）
+- [ ] 1.1.2 实现从官网 URL 获取版本数据（HTTP GET 请求 `https://desktop.dl.hagicode.com/index.json`）
 - [ ] 1.1.3 实现版本比较逻辑（semver 版本号比较）
 - [ ] 1.1.4 实现版本状态文件读写功能（`.github/version-state.json`）
 - [ ] 1.1.5 实现创建 Pull Request 功能（GitHub API）
