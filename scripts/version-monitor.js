@@ -37,8 +37,8 @@ const config = {
   retryDelay: 1000 // Base retry delay in milliseconds
 };
 
-// Version state file path
-const VERSION_STATE_FILE = '.github/version-state.json';
+// Local version data file path
+const VERSION_INDEX_FILE = 'public/version-index.json';
 
 /**
  * Sleep utility for retry delays
@@ -149,50 +149,51 @@ function extractVersionFromData(data) {
 }
 
 /**
- * Load version state from file
- * @returns {Promise<object>} Version state object
+ * Load local version from public/version-index.json
+ * @returns {Promise<string|null>} Latest version from local file, or null if file doesn't exist
  */
-async function loadVersionState() {
+async function loadLocalVersion() {
   try {
-    const content = await fs.readFile(VERSION_STATE_FILE, 'utf-8');
-    const state = JSON.parse(content);
-    logger.info(`Loaded version state: last checked version = ${state.lastCheckedVersion}`);
-    return state;
+    const content = await fs.readFile(VERSION_INDEX_FILE, 'utf-8');
+    const data = JSON.parse(content);
+
+    if (Array.isArray(data.versions) && data.versions.length > 0) {
+      const localVersion = data.versions[0].version;
+      logger.info(`Local version: ${localVersion}`);
+      return localVersion;
+    }
+
+    logger.warn('Local version file exists but contains no versions');
+    return null;
   } catch (error) {
     if (error.code === 'ENOENT') {
-      logger.info('Version state file not found, creating initial state');
-      return createInitialVersionState();
+      logger.info('Local version file not found, treating as empty state');
+      return null;
     }
-    logger.error(`Failed to load version state: ${error.message}`);
-    throw error;
+    logger.error(`Failed to load local version: ${error.message}`);
+    return null;
   }
 }
 
 /**
- * Create initial version state
- * @returns {object} Initial version state object
+ * Update local version data file
+ * @param {object} versionData - Raw version data from online API
  */
-function createInitialVersionState() {
-  return {
-    lastCheckedVersion: null,
-    lastCheckedTime: new Date().toISOString(),
-    lastDeployedVersion: null,
-    lastDeployedTime: null,
-    sourceUrl: config.sourceUrl,
-    checkCount: 0
-  };
-}
-
-/**
- * Save version state to file
- * @param {object} state - Version state object
- */
-async function saveVersionState(state) {
+async function updateLocalVersionIndex(versionData) {
   try {
-    await fs.writeFile(VERSION_STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
-    logger.info('Version state saved successfully');
+    // Ensure public directory exists
+    await fs.mkdir('public', { recursive: true });
+
+    // Write version data to local file
+    await fs.writeFile(
+      VERSION_INDEX_FILE,
+      JSON.stringify(versionData, null, 2),
+      'utf-8'
+    );
+
+    logger.info(`Local version index updated: ${VERSION_INDEX_FILE}`);
   } catch (error) {
-    logger.error(`Failed to save version state: ${error.message}`);
+    logger.error(`Failed to update local version index: ${error.message}`);
     throw error;
   }
 }
@@ -377,28 +378,26 @@ function createVersionBranch(version) {
 }
 
 /**
- * Update version state and commit to current branch
- * @param {object} state - Version state object
+ * Update version index and commit to current branch
  * @param {string} branch - Branch name
+ * @param {object} versionData - Raw version data from online API
  */
-async function updateVersionStateAndCommit(state, branch) {
+async function updateVersionIndexAndCommit(branch, versionData) {
   try {
-    // Update state
-    state.checkCount = (state.checkCount || 0) + 1;
+    // Update local version data file
+    await updateLocalVersionIndex(versionData);
 
-    // Save to file
-    await saveVersionState(state);
-
-    // Commit changes
-    execSync('git add .github/version-state.json', { stdio: 'inherit' });
-    execSync(`git commit -m "chore: update version to ${state.lastCheckedVersion}"`, { stdio: 'inherit' });
+    // Commit changes (only version index file)
+    execSync('git add public/version-index.json', { stdio: 'inherit' });
+    const newVersion = versionData.versions[0].version;
+    execSync(`git commit -m "chore: update version to ${newVersion}"`, { stdio: 'inherit' });
 
     // Push to remote
     execSync(`git push origin ${branch}`, { stdio: 'inherit' });
 
-    logger.info(`Version state committed and pushed to ${branch}`);
+    logger.info(`Version index committed and pushed to ${branch}`);
   } catch (error) {
-    logger.error(`Failed to commit version state: ${error.message}`);
+    logger.error(`Failed to commit version index: ${error.message}`);
     throw error;
   }
 }
@@ -414,17 +413,17 @@ async function createPullRequest(version, branch) {
     const prTitle = `chore: update version to ${version}`;
     const prBody = `## Version Update
 
-This PR updates the version state to reflect the new version detected from the official website.
+This PR updates the version index to reflect the new version detected from the official website.
 
 - **New Version**: ${version}
 - **Source**: ${config.sourceUrl}
 - **Checked At**: ${new Date().toISOString()}
 
 ### Changes
-- Updated \`.github/version-state.json\` with the new version information
+- Updated \`public/version-index.json\` with the latest version data from online API
 
 ### Next Steps
-After merging this PR, the CI/CD pipeline will automatically rebuild and deploy the documentation site with the updated version information.
+After merging this PR, the CI/CD pipeline will automatically rebuild and deploy the documentation site with the updated version information using the local version data file.
 
 ---
 _This PR was automatically created by the Version Monitor workflow._`;
@@ -488,52 +487,39 @@ async function main() {
     })}`);
 
     // Fetch current version from source
-    const { version: currentVersion } = await fetchCurrentVersion();
+    const { version: currentVersion, raw: versionData } = await fetchCurrentVersion();
 
-    // Load current state
-    let state = await loadVersionState();
-
-    // Update check time and count
-    state.lastCheckedTime = new Date().toISOString();
-    state.checkCount = (state.checkCount || 0) + 1;
-    state.sourceUrl = config.sourceUrl;
+    // Load local version from public/version-index.json
+    const localVersion = await loadLocalVersion();
 
     // Check if version has changed
-    const lastVersion = state.lastCheckedVersion || state.lastDeployedVersion;
+    // Empty state (localVersion is null) is treated as a new version scenario
+    const hasEmptyState = !localVersion;
 
-    if (!lastVersion) {
-      logger.info('No previous version found, initializing state');
-      state.lastCheckedVersion = currentVersion;
-      await saveVersionState(state);
-      logger.info('Initial version state saved');
-      return;
+    if (!hasEmptyState) {
+      const versionComparison = compareVersions(currentVersion, localVersion);
+
+      if (versionComparison === 0) {
+        logger.info('Version unchanged - no update needed');
+        return;
+      }
+
+      logger.info(`Version changed: ${localVersion} -> ${currentVersion}`);
+    } else {
+      logger.info('Empty state detected - treating as new version scenario');
     }
-
-    const versionComparison = compareVersions(currentVersion, lastVersion);
-
-    if (versionComparison === 0) {
-      logger.info('Version unchanged - no update needed');
-      state.lastCheckedVersion = currentVersion;
-      await saveVersionState(state);
-      return;
-    }
-
-    logger.info(`Version changed: ${lastVersion} -> ${currentVersion}`);
 
     // Check if PR already exists for this version
     if (await hasExistingPullRequest(currentVersion)) {
       logger.info('Pull request already exists for this version, skipping creation');
-      state.lastCheckedVersion = currentVersion;
-      await saveVersionState(state);
       return;
     }
 
     // Create new branch
     const branch = createVersionBranch(currentVersion);
 
-    // Update state and commit
-    state.lastCheckedVersion = currentVersion;
-    await updateVersionStateAndCommit(state, branch);
+    // Update version index and commit
+    await updateVersionIndexAndCommit(branch, versionData);
 
     // Create pull request
     await createPullRequest(currentVersion, branch);

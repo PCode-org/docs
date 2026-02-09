@@ -2,6 +2,9 @@ name: Version Monitor
 
 # Trigger the workflow every 30 minutes and allow manual triggering
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "*/30 * * * *" # Run every 30 minutes
   workflow_dispatch: # Allow manual trigger from GitHub Actions UI

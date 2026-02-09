@@ -12,6 +12,7 @@ import type {
 import { AssetType } from "@/types/desktop";
 
 const INDEX_JSON_URL = "https://desktop.dl.hagicode.com/index.json";
+const LOCAL_VERSION_INDEX = "/version-index.json";
 const DOWNLOAD_BASE_URL = "https://desktop.dl.hagicode.com/";
 const TIMEOUT_MS = 30000;
 
@@ -123,10 +124,30 @@ export function getAssetTypeLabel(assetType: AssetType): string {
 
 /**
  * 获取版本数据
+ * 优先使用本地文件，确保构建过程不依赖外部服务
  * @returns 版本数据响应
  * @throws 当请求失败或超时时抛出错误
  */
 export async function fetchDesktopVersions(): Promise<DesktopIndexResponse> {
+  // Try to load from local file first
+  try {
+    const response = await fetch(LOCAL_VERSION_INDEX);
+    if (response.ok) {
+      const data: DesktopIndexResponse = await response.json();
+
+      // 验证数据结构
+      if (!Array.isArray(data.versions)) {
+        throw new Error("Invalid data structure: missing versions array");
+      }
+
+      return data;
+    }
+  } catch (error) {
+    // Local file not available, fall back to online API
+    console.warn("Local version index not available, falling back to online API");
+  }
+
+  // Fallback to online API
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
