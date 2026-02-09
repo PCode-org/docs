@@ -1017,6 +1017,61 @@ The homepage MUST include a Footer component that provides navigation links, cop
 **And** link resolution MUST be consistent with the rest of the site
 **And** external links MUST NOT be affected by base path configuration
 
+#### Scenario: Footer ICP and public security filing information display
+
+**Given** a user views the Footer section
+**When** I scroll to the bottom of the page
+**Then** I MUST see the ICP filing number: "闽ICP备2026004153号-1"
+**And** I MUST see the public security filing number: "闽公网安备35011102351148号"
+**And** both filing numbers MUST be displayed as clickable links
+**And** the ICP link MUST point to `https://beian.miit.gov.cn/`
+**And** the public security link MUST point to `http://www.beian.gov.cn/portal/registerSystemInfo`
+**And** both links MUST open in a new tab (`target="_blank"`)
+**And** both links MUST have `rel="noopener noreferrer"` for security
+
+#### Scenario: Footer filing information responsive layout
+
+**Given** the Footer filing information section is displayed
+**When** I view the section on different screen sizes
+**Then** on desktop (width >= 768px):
+  - Both filing links MUST be displayed side by side horizontally
+  - The gap between links MUST be 1.5rem
+**And** on mobile (width < 768px):
+  - The filing links MUST be stacked vertically
+  - The gap between links MUST be 0.75rem
+**And** the layout MUST be implemented using flexbox
+**And** the container MUST use `justify-content: center` for centering
+
+#### Scenario: Footer filing information accessibility
+
+**Given** the Footer filing information is displayed
+**When** I navigate using assistive technologies
+**Then** the ICP link MUST include `aria-label="查看 ICP 备案信息"`
+**And** the public security link MUST include `aria-label="查看公安备案信息"`
+**And** both links MUST be keyboard accessible via Tab key
+**And** focus indicators MUST be visible on both links
+**And** the filing information MUST be separated from other Footer content with a border
+
+#### Scenario: Footer filing information theme consistency
+
+**Given** the site supports light and dark themes
+**When** I toggle between themes
+**Then** the filing information links MUST adapt to the current theme
+**And** link colors MUST remain readable in both themes
+**And** hover states MUST provide visual feedback in both themes
+**And** the border separator MUST be visible in both themes
+**And** text contrast MUST meet WCAG AA standards (4.5:1)
+
+#### Scenario: Footer filing information consistency across components
+
+**Given** the site has two Footer components
+**When** I inspect the Footer implementations
+**Then** both `StarlightFooter.astro` and `home/Footer.tsx` MUST display the same filing information
+**And** both components MUST use the same filing numbers
+**And** both components MUST link to the same external URLs
+**And** both components MUST implement the same responsive layout behavior
+**And** both components MUST include the same accessibility attributes
+
 ---
 
 ### Requirement: Custom 404 Error Page

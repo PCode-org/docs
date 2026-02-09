@@ -210,6 +210,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1.5rem;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -264,6 +265,12 @@
 
   .sectionLink {
     font-size: 0.875rem;
+  }
+
+  /* 备案链接垂直堆叠 */
+  .icpSection {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
 

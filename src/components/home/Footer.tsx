@@ -250,6 +250,15 @@ export default function Footer({ className = '' }: FooterProps) {
         >
           闽ICP备2026004153号-1
         </a>
+        <a
+          className={styles.icpLink}
+          href="http://www.beian.gov.cn/portal/registerSystemInfo"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="查看公安备案信息"
+        >
+          闽公网安备35011102351148号
+        </a>
       </div>
     </footer>
   );

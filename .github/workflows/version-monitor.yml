@@ -18,6 +18,10 @@ jobs:
   monitor:
     name: Monitor Version Changes
     runs-on: ubuntu-latest
+    outputs:
+      pr_created: ${{ steps.monitor.outputs.pr_created }}
+      new_version: ${{ steps.monitor.outputs.new_version }}
+      pr_url: ${{ steps.monitor.outputs.pr_url }}
 
     steps:
       - name: Checkout repository
@@ -69,3 +73,38 @@ jobs:
           echo "===================="
           echo "PR Number: ${{ steps.monitor.outputs.pr_number }}"
           echo "PR URL: ${{ steps.monitor.outputs.pr_url }}"
+
+  notify-version-update:
+    needs: monitor
+    if: needs.monitor.outputs.pr_created == 'true'
+    uses: HagiCode-org/haginotifier/.github/workflows/notify.yml@main
+    with:
+      msg_type: 'post'
+      title: 'Version Monitor'
+      message: |
+        ## Version Monitor
+
+        **状态**: 🔄 发现新版本
+        **新版本**: ${{ needs.monitor.outputs.new_version }}
+        **仓库**: ${{ github.repository }}
+        **PR 链接**: ${{ needs.monitor.outputs.pr_url }}
+        **运行详情**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+
+  notify-failure:
+    needs: monitor
+    if: failure()
+    uses: HagiCode-org/haginotifier/.github/workflows/notify.yml@main
+    with:
+      msg_type: 'post'
+      title: 'Version Monitor'
+      message: |
+        ## Version Monitor
+
+        **状态**: ❌ 失败
+        **仓库**: ${{ github.repository }}
+        **触发者**: ${{ github.actor }}
+        **运行详情**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}

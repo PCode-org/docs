@@ -88,6 +88,15 @@ import Clarity from './Clarity.astro';
 			>
 				闽ICP备2026004153号-1
 			</a>
+			<a
+				href="http://www.beian.gov.cn/portal/registerSystemInfo"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="查看公安备案信息"
+				class="unified-footer-icp-link"
+			>
+				闽公网安备35011102351148号
+			</a>
 		</div>
 	</div>
 </footer>
@@ -279,6 +288,7 @@ import Clarity from './Clarity.astro';
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 1.5rem;
 			width: 100%;
 			max-width: 1200px;
 			margin: 0 auto;
@@ -328,6 +338,12 @@ import Clarity from './Clarity.astro';
 
 			.unified-footer-link {
 				font-size: 0.875rem;
+			}
+
+			/* 备案链接垂直堆叠 */
+			.unified-footer-icp {
+				flex-direction: column;
+				gap: 0.75rem;
 			}
 		}
 
