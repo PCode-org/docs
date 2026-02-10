@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-02-08T01:51:49.661Z",
+  "lastUpdated": "2026-02-10T01:30:06.802Z",
   "dockerHub": {
-    "pullCount": 774,
+    "pullCount": 908,
     "repository": "newbe36524/hagicode"
   },
   "clarity": {
-    "activeUsers": 73,
+    "activeUsers": 59,
     "activeSessions": 56,
     "dateRange": "3Days"
   }
