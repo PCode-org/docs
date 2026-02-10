@@ -68,7 +68,8 @@ jobs:
       - name: Commit version changes
         if: steps.monitor.outputs.update_needed == 'true'
         run: |
-          git add public/version-index.json
+          git add apps/docs/public/version-index.json
+          git add apps/website/public/version-index.json
           git commit -m "chore: update version to ${{ steps.monitor.outputs.new_version }}"
 
       - name: Delete remote branch if exists
@@ -119,7 +120,8 @@ jobs:
           - **Checked At**: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           ### Changes
-          - Updated \`public/version-index.json\` with the latest version data from online API
+          - Updated \`apps/docs/public/version-index.json\` with the latest version data from online API
+          - Updated \`apps/website/public/version-index.json\` with the latest version data (synced from docs)
 
           ### Next Steps
           After merging this PR, the CI/CD pipeline will automatically rebuild and deploy the documentation site with the updated version information.

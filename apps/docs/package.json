@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node ../../scripts/generate-redirects.js && node ../../scripts/custom-404.js",
+    "build": "astro build && node ../../scripts/custom-404.js",
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "tsc --noEmit"

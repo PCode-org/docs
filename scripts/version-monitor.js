@@ -31,7 +31,7 @@ const config = {
 };
 
 // Local version data file path
-const VERSION_INDEX_FILE = 'public/version-index.json';
+const VERSION_INDEX_FILE = 'apps/docs/public/version-index.json';
 
 /**
  * Sleep utility for retry delays
@@ -174,8 +174,8 @@ async function loadLocalVersion() {
  */
 async function updateLocalVersionIndex(versionData) {
   try {
-    // Ensure public directory exists
-    await fs.mkdir('public', { recursive: true });
+    // Ensure apps/docs/public directory exists
+    await fs.mkdir('apps/docs/public', { recursive: true });
 
     // Write version data to local file
     await fs.writeFile(

@@ -1,6 +1,83 @@
 {
-  "updatedAt": 1770616785.450681,
+  "updatedAt": 1770689310.575562,
   "versions": [
+    {
+      "version": "v0.1.5",
+      "files": [
+        "Hagicode.Desktop-0.1.5-arm64-mac.zip",
+        "Hagicode.Desktop-0.1.5-arm64.dmg",
+        "Hagicode.Desktop-0.1.5-mac.zip",
+        "Hagicode.Desktop-0.1.5.AppImage",
+        "Hagicode.Desktop-0.1.5.dmg",
+        "Hagicode.Desktop.0.1.5.appx",
+        "Hagicode.Desktop.0.1.5.exe",
+        "Hagicode.Desktop.Setup.0.1.5.exe",
+        "hagicode-desktop-0.1.5.tar.gz",
+        "hagicode-desktop_0.1.5_amd64.deb"
+      ],
+      "assets": [
+        {
+          "name": "Hagicode.Desktop-0.1.5-arm64-mac.zip",
+          "path": "v0.1.5/Hagicode.Desktop-0.1.5-arm64-mac.zip",
+          "size": 169573000,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop-0.1.5-arm64.dmg",
+          "path": "v0.1.5/Hagicode.Desktop-0.1.5-arm64.dmg",
+          "size": 177184332,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop-0.1.5-mac.zip",
+          "path": "v0.1.5/Hagicode.Desktop-0.1.5-mac.zip",
+          "size": 175026018,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop-0.1.5.AppImage",
+          "path": "v0.1.5/Hagicode.Desktop-0.1.5.AppImage",
+          "size": 183415071,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop-0.1.5.dmg",
+          "path": "v0.1.5/Hagicode.Desktop-0.1.5.dmg",
+          "size": 182674856,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop.0.1.5.appx",
+          "path": "v0.1.5/Hagicode.Desktop.0.1.5.appx",
+          "size": 211332709,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop.0.1.5.exe",
+          "path": "v0.1.5/Hagicode.Desktop.0.1.5.exe",
+          "size": 106650005,
+          "lastModified": null
+        },
+        {
+          "name": "Hagicode.Desktop.Setup.0.1.5.exe",
+          "path": "v0.1.5/Hagicode.Desktop.Setup.0.1.5.exe",
+          "size": 106848938,
+          "lastModified": null
+        },
+        {
+          "name": "hagicode-desktop-0.1.5.tar.gz",
+          "path": "v0.1.5/hagicode-desktop-0.1.5.tar.gz",
+          "size": 171384559,
+          "lastModified": null
+        },
+        {
+          "name": "hagicode-desktop_0.1.5_amd64.deb",
+          "path": "v0.1.5/hagicode-desktop_0.1.5_amd64.deb",
+          "size": 117147644,
+          "lastModified": null
+        }
+      ]
+    },
     {
       "version": "v0.1.4",
       "files": [
