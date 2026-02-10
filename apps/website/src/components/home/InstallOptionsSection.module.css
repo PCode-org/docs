@@ -1,0 +1,407 @@
+/**
+ * InstallOptionsSection 样式
+ * 安装选项展示区域样式 - 桌面应用 vs 容器版本
+ * 设计系统: HUD/Sci-Fi FUI + Glassmorphism
+ */
+
+.installSection {
+  padding: 6rem 0;
+  background: var(--color-background);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 科技感网格背景 */
+.bgGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-border-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-light) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme='dark'] .bgGrid {
+  opacity: 0.1;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+}
+
+/* 光晕背景 */
+.bgGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: var(--gradient-glow);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+[data-theme='dark'] .bgGlow {
+  opacity: 0.15;
+}
+
+/* Section Header */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionDescription {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Options Grid */
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Option Card */
+.optionCard {
+  position: relative;
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem;
+  transition: all var(--duration-normal) var(--ease-out);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme='dark'] .optionCard {
+  background: rgba(20, 25, 50, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.optionCardPopular {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 40px rgba(0, 128, 255, 0.15);
+}
+
+[data-theme='dark'] .optionCardPopular {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.12);
+}
+
+.optionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 128, 255, 0.2);
+}
+
+[data-theme='dark'] .optionCard:hover {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 255, 255, 0.15);
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 128, 255, 0.3);
+}
+
+[data-theme='dark'] .badge {
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+}
+
+/* Option Icon */
+.optionIcon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.optionCard:hover .optionIcon {
+  transform: scale(1.1);
+  background: var(--gradient-primary);
+}
+
+.optionCard:hover .optionIcon svg {
+  color: #FFFFFF;
+}
+
+.optionIcon svg {
+  width: 36px;
+  height: 36px;
+}
+
+/* Option Title */
+.optionTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
+
+/* Option Description */
+.optionDescription {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Features List */
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex: 1;
+}
+
+.featuresList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.checkIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.checkIcon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
+}
+
+/* CTA Button */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ctaButton svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.ctaButton:hover svg {
+  transform: translateX(4px);
+}
+
+/* Secondary Button */
+.ctaButtonSecondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.ctaButtonSecondary:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
+}
+
+/* Primary Button */
+.ctaButtonPrimary {
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 16px rgba(0, 128, 255, 0.3);
+}
+
+.ctaButtonPrimary:hover {
+  box-shadow: 0 6px 24px rgba(0, 128, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+[data-theme='dark'] .ctaButtonPrimary {
+  box-shadow: 0 4px 16px rgba(0, 255, 255, 0.25);
+}
+
+[data-theme='dark'] .ctaButtonPrimary:hover {
+  box-shadow: 0 6px 24px rgba(0, 255, 255, 0.35);
+}
+
+/* 农历新年主题 */
+[data-theme='lunar-new-year'] .optionCardPopular {
+  border-color: #FFD54F;
+  box-shadow: 0 0 40px rgba(255, 193, 7, 0.25);
+}
+
+[data-theme='lunar-new-year'] .badge {
+  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+}
+
+[data-theme='lunar-new-year'] .ctaButtonPrimary {
+  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+  box-shadow: 0 4px 16px rgba(229, 57, 53, 0.35);
+}
+
+[data-theme='lunar-new-year'] .ctaButtonPrimary:hover {
+  box-shadow: 0 6px 24px rgba(229, 57, 53, 0.45);
+}
+
+[data-theme='lunar-new-year'] .ctaButtonSecondary {
+  color: #FFD54F;
+  border-color: #FFD54F;
+}
+
+[data-theme='lunar-new-year'] .ctaButtonSecondary:hover {
+  border-color: #FFA000;
+  color: #FFA000;
+}
+
+[data-theme='lunar-new-year'] .checkIcon {
+  color: #4ADE80;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+  .installSection {
+    padding: 4rem 0;
+  }
+
+  .optionsGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 500px;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionDescription {
+    font-size: 1rem;
+  }
+
+  .optionCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .optionTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .installSection {
+    padding: 3rem 0;
+  }
+
+  .optionCard {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .optionIcon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .optionIcon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .optionTitle {
+    font-size: 1.35rem;
+  }
+
+  .featuresList li {
+    font-size: 0.9rem;
+  }
+
+  .ctaButton {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* 减少运动敏感度 */
+@media (prefers-reduced-motion: reduce) {
+  .optionCard,
+  .ctaButton,
+  .optionIcon,
+  .ctaButton svg {
+    transition: none;
+  }
+
+  .optionCard:hover {
+    transform: none;
+  }
+
+  .optionCard:hover .optionIcon {
+    transform: none;
+  }
+
+  .ctaButton:hover svg {
+    transform: none;
+  }
+}

@@ -291,13 +291,21 @@ main.homepage section > .bgGlow {
    ========================================================================== */
 
 .features {
-  padding: 4rem 0;
+  padding: 5rem 0;
 }
 
 .features h2 {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .features-grid {
@@ -548,17 +556,20 @@ starlight-tabs {
 .installation-guide,
 .version-history,
 .faq {
-  padding: 4rem 0;
+  padding: 5rem 0;
 }
 
 .system-requirements h2,
 .installation-guide h2,
 .version-history h2,
 .faq h2 {
-  font-size: 2rem;
-  margin-bottom: 3rem;
-  margin-top: 4rem;
+  text-align: center;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
   color: var(--color-text);
+  font-family: var(--font-display);
 }
 
 .requirements-content,
@@ -966,7 +977,13 @@ starlight-tabs {
 }
 
 /* 新年主题标题 - 金色 */
-[data-theme='lunar-new-year'] .features h2,
+[data-theme='lunar-new-year'] .features h2 {
+  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 [data-theme='lunar-new-year'] .system-requirements h2,
 [data-theme='lunar-new-year'] .installation-guide h2,
 [data-theme='lunar-new-year'] .version-history h2,

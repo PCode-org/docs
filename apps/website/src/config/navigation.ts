@@ -42,6 +42,11 @@ export const navLinks: NavLink[] = [
     linkKey: 'desktop',
   },
   {
+    label: "容器版本",
+    href: getLink('container'),
+    linkKey: 'container',
+  },
+  {
     label: "技术支持群",
     href: getLink('qqGroup'),
     external: true,
