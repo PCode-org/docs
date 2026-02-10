@@ -43,18 +43,6 @@ jobs:
         env:
           CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
 
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
-      - name: Get Id Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
-
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -62,7 +50,7 @@ jobs:
           # 注意: 需要在 GitHub Secrets 中配置新的 Azure Static Web Apps API token
           # 建议命名为: AZURE_STATIC_WEB_APPS_API_TOKEN_WEBSITE
           # 如果暂时使用相同的 token，可以保持不变
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WEBSITE || secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_FLOWER_0F8ED9400 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_FLOWER_WEBSITE }}
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
