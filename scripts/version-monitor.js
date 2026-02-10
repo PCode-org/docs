@@ -4,7 +4,12 @@
  * Version Monitor Script
  *
  * This script monitors the version from the official website URL and updates
- * the local version index file. Pull Request creation is handled by the workflow.
+ * the local version index files for both the documentation site and marketing site.
+ * Pull Request creation is handled by the workflow.
+ *
+ * Updates the following files atomically:
+ * - apps/docs/public/version-index.json (primary)
+ * - apps/website/public/version-index.json (secondary)
  *
  * Environment Variables:
  * - VERSION_SOURCE_URL: URL to fetch version data (default: https://desktop.dl.hagicode.com/index.json)
@@ -30,8 +35,12 @@ const config = {
   retryDelay: 1000 // Base retry delay in milliseconds
 };
 
-// Local version data file path
-const VERSION_INDEX_FILE = 'apps/docs/public/version-index.json';
+// Local version data file paths for both sites
+const VERSION_INDEX_FILES = [
+  'apps/docs/public/version-index.json',  // Primary: documentation site
+  'apps/website/public/version-index.json' // Secondary: marketing site
+];
+const VERSION_INDEX_PRIMARY = VERSION_INDEX_FILES[0];
 
 /**
  * Sleep utility for retry delays
@@ -142,12 +151,12 @@ function extractVersionFromData(data) {
 }
 
 /**
- * Load local version from public/version-index.json
+ * Load local version from primary site's version-index.json
  * @returns {Promise<string|null>} Latest version from local file, or null if file doesn't exist
  */
 async function loadLocalVersion() {
   try {
-    const content = await fs.readFile(VERSION_INDEX_FILE, 'utf-8');
+    const content = await fs.readFile(VERSION_INDEX_PRIMARY, 'utf-8');
     const data = JSON.parse(content);
 
     if (Array.isArray(data.versions) && data.versions.length > 0) {
@@ -169,25 +178,43 @@ async function loadLocalVersion() {
 }
 
 /**
- * Update local version data file
+ * Update local version data files for both sites
+ * Writes to both files atomically - if either write fails, both are rolled back
  * @param {object} versionData - Raw version data from online API
  */
 async function updateLocalVersionIndex(versionData) {
+  const writtenFiles = [];
+  const content = JSON.stringify(versionData, null, 2);
+
   try {
-    // Ensure apps/docs/public directory exists
-    await fs.mkdir('apps/docs/public', { recursive: true });
+    // Write to both files
+    for (const filePath of VERSION_INDEX_FILES) {
+      // Ensure directory exists
+      const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
+      await fs.mkdir(dirPath, { recursive: true });
 
-    // Write version data to local file
-    await fs.writeFile(
-      VERSION_INDEX_FILE,
-      JSON.stringify(versionData, null, 2),
-      'utf-8'
-    );
+      // Write file
+      await fs.writeFile(filePath, content, 'utf-8');
+      writtenFiles.push(filePath);
+      logger.info(`Version index updated: ${filePath}`);
+    }
 
-    logger.info(`Local version index updated: ${VERSION_INDEX_FILE}`);
+    logger.info('All version index files updated successfully');
   } catch (error) {
-    logger.error(`Failed to update local version index: ${error.message}`);
-    throw error;
+    // Rollback: delete any files that were successfully written
+    logger.error(`Write failed: ${error.message}`);
+    logger.info('Rolling back written files...');
+
+    for (const filePath of writtenFiles) {
+      try {
+        await fs.unlink(filePath);
+        logger.debug(`Rolled back: ${filePath}`);
+      } catch (unlinkError) {
+        logger.warn(`Failed to rollback ${filePath}: ${unlinkError.message}`);
+      }
+    }
+
+    throw new Error(`Failed to update version index files: ${error.message}`);
   }
 }
 
