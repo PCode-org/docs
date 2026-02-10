@@ -27,7 +27,7 @@ const getBasePath = () => {
 // https://astro.build/config
 export default defineConfig({
     // 站点完整 URL,用于生成 sitemap 和 canonical URL
-    site: 'https://hagicode.com',
+    site: 'https://docs.hagicode.com',
     // 文档站点部署路径：开发环境为根路径，生产环境为 /docs
     base: getBasePath(),
     markdown: {
@@ -61,7 +61,7 @@ export default defineConfig({
     integrations: [
         // robots.txt 配置 - 使用 astro-robots-txt 插件
         robotsTxt({
-            sitemap: 'https://hagicode.com/docs/sitemap-index.xml',
+            sitemap: 'https://docs.hagicode.com/docs/sitemap-index.xml',
         }),
         starlight({
             title: 'Hagicode Docs',
