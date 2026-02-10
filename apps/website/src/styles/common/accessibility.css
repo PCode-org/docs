@@ -1,0 +1,46 @@
+/**
+ * 公共可访问性样式
+ * 适用于所有页面
+ * 包含 prefers-reduced-motion 和 focus-visible 样式
+ */
+
+/* ==========================================================================
+   可访问性：尊重用户的运动偏好设置
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* 保留必要的淡入动画但移除位移 */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ==========================================================================
+   Focus Visible 样式统一
+   ========================================================================== */
+
+/* 统一 focus-visible 样式（已在各组件中定义，这里作为备用） */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 新年主题 focus-visible 样式 */
+[data-theme='lunar-new-year'] :focus-visible {
+  outline: 2px solid #FFC107;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.3);
+}

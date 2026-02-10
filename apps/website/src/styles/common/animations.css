@@ -1,0 +1,44 @@
+/**
+ * 公共动画关键帧
+ * 适用于所有页面
+ */
+
+/* ==========================================================================
+   动画关键帧
+   ========================================================================== */
+
+/* fadeInUp - 从下往上淡入 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* fadeIn - 淡入 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* pulse-badge - 推荐标签脉冲动画 */
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 2px 12px rgba(255, 107, 107, 0.6);
+  }
+}
