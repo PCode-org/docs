@@ -1,0 +1,168 @@
+/**
+ * 公共 FAQ 组件样式
+ * 适用于所有页面
+ * 统一折叠面板动画、图标、边距
+ */
+
+/* ==========================================================================
+   FAQ Section
+   ========================================================================== */
+
+.faq {
+  padding: 5rem 0;
+}
+
+.faq h2 {
+  text-align: center;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* FAQ Item - 统一折叠面板样式 */
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.faq-item:hover {
+  border-color: var(--color-primary);
+}
+
+/* FAQ Summary - 统一样式 */
+.faq-item summary {
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  background: var(--color-surface);
+  font-weight: 500;
+  color: var(--color-text) !important;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+  position: relative;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 移除默认的三角形 */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 自定义展开/收起图标 */
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--color-primary);
+  transition: transform 0.3s ease-out;
+}
+
+.faq-item[open] summary::after {
+  content: '−';
+  transform: rotate(180deg);
+}
+
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.faq-item summary:hover {
+  background: var(--color-surface-hover);
+}
+
+/* FAQ Content - 统一样式 */
+.faq-content {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.faq-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary) !important;
+}
+
+.faq-content h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text) !important;
+}
+
+.faq-content ul,
+.faq-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.faq-content li {
+  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary) !important;
+}
+
+.faq-content strong {
+  color: inherit;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .faq-content strong {
+  color: var(--color-text);
+}
+
+[data-theme='lunar-new-year'] .faq-content strong {
+  color: #FFF9C4;
+}
+
+.faq-content pre {
+  background: var(--color-surface-hover);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.faq-content pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--color-text-secondary);
+}
+
+.faq-content code {
+  background: var(--color-surface-hover);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  color: var(--color-primary);
+}
+
+[data-theme='dark'] .faq-content code {
+  color: #4ADE80;
+}
+
+[data-theme='lunar-new-year'] .faq-content code {
+  color: #FFD54F;
+}
+
+.faq-content a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.faq-content a:hover {
+  text-decoration: underline;
+}

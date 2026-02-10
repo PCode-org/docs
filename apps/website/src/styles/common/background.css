@@ -1,0 +1,50 @@
+/**
+ * 公共背景装饰元素样式
+ * 适用于所有页面
+ */
+
+/* ==========================================================================
+   背景装饰元素
+   ========================================================================== */
+
+/* 网格背景 */
+.tech-grid-bg {
+  background-image:
+    linear-gradient(var(--color-border-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-light) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 光晕背景 */
+.bgGlow {
+  background: var(--gradient-glow);
+}
+
+/* 发光边框效果 */
+.tech-border-glow {
+  position: relative;
+  border: 1px solid var(--color-primary);
+  box-shadow: var(--shadow-glow),
+              inset 0 0 20px rgba(0, 128, 255, 0.1);
+}
+
+[data-theme='dark'] .tech-border-glow {
+  box-shadow: var(--shadow-glow),
+              inset 0 0 30px rgba(0, 128, 255, 0.15);
+}
+
+/* 扫描线效果 - 仅在暗色模式 */
+[data-theme='dark'] .tech-scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 255, 0.03) 2px,
+    rgba(0, 255, 255, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}

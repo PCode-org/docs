@@ -1,0 +1,86 @@
+/**
+ * 公共 Feature Card 样式
+ * 适用于所有页面
+ * 统一卡片尺寸标准：padding: 2rem，border-radius: 0.75rem
+ */
+
+/* ==========================================================================
+   Features Section
+   ========================================================================== */
+
+.features {
+  padding: 5rem 0;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Feature Card - 统一标准尺寸 */
+.feature-card {
+  padding: 2rem;
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+  animation: fadeInUp 0.6s ease-out backwards;
+  cursor: pointer;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Feature Card 动画延迟 */
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+.feature-card:nth-child(5) { animation-delay: 0.5s; }
+.feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Feature Icon - 统一标准尺寸 */
+.feature-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.feature-card p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}

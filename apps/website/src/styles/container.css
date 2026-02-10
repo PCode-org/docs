@@ -1,14 +1,20 @@
 /**
  * Container 页面专属样式
- * 与首页样式系统 (homepage.css) 配合使用
+ * 导入首页样式系统以获取所有公共样式
  * 设计系统: HUD/Sci-Fi FUI + Glassmorphism
  * 重点突出 Docker Compose Builder
  */
 
 /* ==========================================================================
-   背景装饰元素 - 全宽显示
+   导入首页样式系统（包含所有公共样式）
+   ========================================================================== */
+@import './homepage.css';
+
+/* ==========================================================================
+   Container 页面特定样式
    ========================================================================== */
 
+/* 背景装饰元素 - 全宽显示 */
 main.homepage section > .tech-grid-bg,
 main.homepage section > .bgGlow {
   max-width: none !important;
@@ -20,213 +26,18 @@ main.homepage section > .bgGlow {
   z-index: 0;
 }
 
-/* 网格背景样式 */
-.tech-grid-bg {
-  background-image:
-    linear-gradient(var(--color-border-light) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-border-light) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* 光晕背景样式 */
-.bgGlow {
-  background: var(--gradient-glow);
-}
-
 /* ==========================================================================
-   Hero Section - 布局
+   Container 页面 Section 间距调整
    ========================================================================== */
 
-.hero {
-  position: relative;
-  text-align: center;
-  padding: 4rem 0;
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.hero-content h1 {
-  font-size: clamp(2.5rem, 10vw, 4rem);
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: var(--color-text);
-  animation: fadeInUp 0.8s ease-out 0.2s backwards;
-  line-height: 1.3;
-  min-height: 1.3em;
-}
-
-.hero-tagline {
-  font-size: 1.25rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.8s ease-out 0.4s backwards;
-}
-
-/* Hero CTA 区域 */
-.hero-cta {
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 0.8s ease-out 0.6s backwards;
-}
-
-/* 主按钮样式 */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  min-height: 56px;
-  padding: 1rem 2.5rem;
-  background: var(--gradient-primary);
-  color: #FFFFFF;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-  box-shadow: var(--shadow-glow);
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.btn-primary.btn-large {
-  min-height: 64px;
-  font-size: 1.25rem;
-  padding: 1.25rem 3rem;
-}
-
-.btn-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.btn-arrow {
-  width: 20px;
-  height: 20px;
-  margin-left: 0.5rem;
-}
-
-.version-info {
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-}
-
-.platform-info {
-  color: var(--color-text-muted);
-}
-
-.hero-features {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-}
-
-.feature-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background: var(--color-surface-hover);
-  border: 1px solid var(--color-border);
-  border-radius: 2rem;
-  font-size: 0.875rem;
-  color: var(--color-primary);
-  gap: 0.25rem;
-}
-
-/* ==========================================================================
-   Features Section
-   ========================================================================== */
-
+/* Features Section - Hero 之后的第一段内容，上间距较小 */
 .features {
-  padding: 5rem 0;
+  padding: 4rem 0 6rem;
 }
 
-.features h2 {
-  text-align: center;
-  font-size: clamp(2rem, 6vw, 3rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  letter-spacing: -0.03em;
-  color: var(--color-text);
-  font-family: var(--font-display);
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.feature-card {
-  padding: 2rem;
-  background: var(--color-surface-glass);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
-  animation: fadeInUp 0.6s ease-out backwards;
-  cursor: pointer;
-}
-
-.feature-card:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.feature-card:nth-child(1) { animation-delay: 0.1s; }
-.feature-card:nth-child(2) { animation-delay: 0.2s; }
-.feature-card:nth-child(3) { animation-delay: 0.3s; }
-.feature-card:nth-child(4) { animation-delay: 0.4s; }
-.feature-card:nth-child(5) { animation-delay: 0.5s; }
-.feature-card:nth-child(6) { animation-delay: 0.6s; }
-
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.feature-icon-wrapper {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  color: var(--color-text);
-}
-
-.feature-card p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
+/* FAQ Section - 最后一个主要内容区域，底部间距较大 */
+.faq {
+  padding: 7rem 0 3rem;
 }
 
 /* ==========================================================================
@@ -234,7 +45,7 @@ main.homepage section > .bgGlow {
    ========================================================================== */
 
 .builder-intro {
-  padding: 5rem 0;
+  padding: 6rem 0 5rem;
   background: var(--color-surface-glass);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -279,6 +90,11 @@ main.homepage section > .bgGlow {
   box-shadow: var(--shadow-lg);
 }
 
+.builder-feature:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .builder-icon {
   width: 64px;
   height: 64px;
@@ -316,7 +132,7 @@ main.homepage section > .bgGlow {
    ========================================================================== */
 
 .mirror-sources {
-  padding: 5rem 0;
+  padding: 7rem 0 5rem;
 }
 
 .mirror-sources h2 {
@@ -349,6 +165,11 @@ main.homepage section > .bgGlow {
 .mirror-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+}
+
+.mirror-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .mirror-header {
@@ -399,159 +220,11 @@ main.homepage section > .bgGlow {
 }
 
 /* ==========================================================================
-   FAQ
-   ========================================================================== */
-
-.faq {
-  padding: 5rem 0;
-}
-
-.faq h2 {
-  text-align: center;
-  font-size: clamp(2rem, 6vw, 3rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  letter-spacing: -0.03em;
-  color: var(--color-text);
-  font-family: var(--font-display);
-}
-
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.faq-item {
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  overflow: hidden;
-  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.faq-item:hover {
-  border-color: var(--color-primary);
-}
-
-.faq-item summary {
-  cursor: pointer;
-  padding: 1rem 1.5rem;
-  background: var(--color-surface);
-  font-weight: 500;
-  color: var(--color-text) !important;
-  transition: background-color 0.2s ease-out, color 0.2s ease-out;
-  position: relative;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-item summary::after {
-  content: '+';
-  font-size: 1.5rem;
-  font-weight: 300;
-  color: var(--color-primary);
-  transition: transform 0.3s ease-out;
-}
-
-.faq-item[open] summary::after {
-  content: '−';
-  transform: rotate(180deg);
-}
-
-.faq-item summary:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -2px;
-}
-
-.faq-item summary:hover {
-  background: var(--color-surface-hover);
-}
-
-.faq-content {
-  padding: 1.5rem;
-  border-top: 1px solid var(--color-border);
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.faq-content p {
-  margin-bottom: 1rem;
-  line-height: 1.6;
-  color: var(--color-text-secondary) !important;
-}
-
-.faq-content h4 {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--color-text) !important;
-}
-
-.faq-content ul {
-  margin-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.faq-content li {
-  margin-bottom: 0.5rem;
-  color: var(--color-text-secondary) !important;
-}
-
-.faq-content ol {
-  margin-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.faq-content pre {
-  background: var(--color-surface-hover);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin: 1rem 0;
-}
-
-.faq-content pre code {
-  background: transparent;
-  padding: 0;
-  color: var(--color-text-secondary);
-}
-
-.faq-content a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.faq-content a:hover {
-  text-decoration: underline;
-}
-
-[data-theme='lunar-new-year'] .faq-content pre code {
-  color: #FFE082;
-}
-
-/* ==========================================================================
    CTA Section
    ========================================================================== */
 
 .cta-section {
-  padding: 5rem 0;
+  padding: 6rem 0 7rem;
   text-align: center;
   background: var(--color-surface-glass);
   border-top: 1px solid var(--color-border);
@@ -579,121 +252,9 @@ main.homepage section > .bgGlow {
   flex-wrap: wrap;
 }
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.75rem 2rem;
-  background: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  text-decoration: none;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background: var(--color-surface-hover);
-  transform: translateY(-2px);
-}
-
-.btn-secondary:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 /* ==========================================================================
-   动画关键帧
+   Container 页面特定农历新年主题样式
    ========================================================================== */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ==========================================================================
-   农历新年主题专属样式
-   ========================================================================== */
-
-[data-theme='lunar-new-year'] .hero-content h1 {
-  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: #FFD54F;
-}
-
-[data-theme='lunar-new-year'] .hero-tagline {
-  color: #FFE082;
-}
-
-[data-theme='lunar-new-year'] .features h2 {
-  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-[data-theme='lunar-new-year'] .builder-intro h2,
-[data-theme='lunar-new-year'] .mirror-sources h2,
-[data-theme='lunar-new-year'] .faq h2,
-[data-theme='lunar-new-year'] .cta-section h2 {
-  color: #FFD54F;
-}
-
-[data-theme='lunar-new-year'] .feature-card h3,
-[data-theme='lunar-new-year'] .mirror-header h3 {
-  color: #FFF9C4;
-}
-
-[data-theme='lunar-new-year'] .feature-card p,
-[data-theme='lunar-new-year'] .mirror-card p {
-  color: #FFE082;
-}
-
-[data-theme='lunar-new-year'] .builder-feature h3 {
-  color: #FFF9C4;
-}
-
-[data-theme='lunar-new-year'] .builder-feature p {
-  color: #FFE082;
-}
-
-[data-theme='lunar-new-year'] .btn-primary {
-  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
-  border: 1px solid #FFD54F;
-  box-shadow: 0 0 20px rgba(229, 57, 53, 0.5);
-}
-
-[data-theme='lunar-new-year'] .btn-primary:hover {
-  box-shadow: 0 0 30px rgba(229, 57, 53, 0.7), 0 0 20px rgba(255, 193, 7, 0.4);
-}
-
-[data-theme='lunar-new-year'] .btn-secondary {
-  color: #FFD54F;
-  border-color: #FFD54F;
-}
-
-[data-theme='lunar-new-year'] .feature-card,
-[data-theme='lunar-new-year'] .mirror-card {
-  border: 1px solid rgba(255, 193, 7, 0.4);
-}
-
-[data-theme='lunar-new-year'] .feature-card:hover,
-[data-theme='lunar-new-year'] .mirror-card:hover {
-  border-color: rgba(255, 193, 7, 0.6);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 193, 7, 0.2);
-}
 
 [data-theme='lunar-new-year'] .builder-feature {
   border-color: rgba(255, 193, 7, 0.3);
@@ -703,42 +264,6 @@ main.homepage section > .bgGlow {
   border-color: rgba(255, 193, 7, 0.5);
 }
 
-[data-theme='lunar-new-year'] .faq-item summary {
-  color: #FFF9C4 !important;
-}
-
-[data-theme='lunar-new-year'] .faq-content p,
-[data-theme='lunar-new-year'] .faq-content li {
-  color: #FFE082 !important;
-}
-
-[data-theme='lunar-new-year'] .faq-content h4 {
-  color: #FFF9C4 !important;
-}
-
-/* ==========================================================================
-   可访问性：尊重用户的运动偏好设置
-   ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-}
-
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
@@ -746,12 +271,6 @@ main.homepage section > .bgGlow {
 @media (max-width: 768px) {
   .hero-content h1 {
     font-size: 2rem;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    min-height: 48px;
   }
 
   .hero-cta,

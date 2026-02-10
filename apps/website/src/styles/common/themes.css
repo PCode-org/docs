@@ -1,0 +1,162 @@
+/**
+ * 公共主题覆盖样式
+ * 适用于所有页面
+ * 确保三个页面主题样式一致
+ */
+
+/* ==========================================================================
+   农历新年主题专属样式
+   ========================================================================== */
+
+/* 新年主题 Hero 标题 - 金色渐变 */
+[data-theme='lunar-new-year'] .hero-content h1 {
+  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #FFD54F;
+}
+
+/* 新年主题副标题 - 金色文字 */
+[data-theme='lunar-new-year'] .hero-tagline {
+  color: #FFE082;
+}
+
+/* 新年主题 Features 标题 - 金色渐变 */
+[data-theme='lunar-new-year'] .features h2 {
+  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 新年主题 Section 标题 - 金色 */
+[data-theme='lunar-new-year'] .builder-intro h2,
+[data-theme='lunar-new-year'] .mirror-sources h2,
+[data-theme='lunar-new-year'] .faq h2,
+[data-theme='lunar-new-year'] .cta-section h2,
+[data-theme='lunar-new-year'] .system-requirements h2,
+[data-theme='lunar-new-year'] .installation-guide h2,
+[data-theme='lunar-new-year'] .version-history h2 {
+  color: #FFD54F;
+}
+
+/* 新年主题卡片标题 */
+[data-theme='lunar-new-year'] .feature-card h3,
+[data-theme='lunar-new-year'] .mirror-header h3,
+[data-theme='lunar-new-year'] .builder-feature h3,
+[data-theme='lunar-new-year'] .version-header h3 {
+  color: #FFF9C4;
+}
+
+/* 新年主题卡片内容 */
+[data-theme='lunar-new-year'] .feature-card p,
+[data-theme='lunar-new-year'] .mirror-card p,
+[data-theme='lunar-new-year'] .builder-feature p,
+[data-theme='lunar-new-year'] .version-downloads th {
+  color: #FFE082;
+}
+
+/* 新年主题主按钮 - 红底金字 */
+[data-theme='lunar-new-year'] .btn-primary {
+  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+  box-shadow: 0 0 20px rgba(229, 57, 53, 0.5);
+}
+
+/* 新年主题主按钮悬停 */
+[data-theme='lunar-new-year'] .btn-primary:hover {
+  background: linear-gradient(135deg, #EF5350 0%, #D32F2F 100%);
+  box-shadow: 0 0 30px rgba(229, 57, 53, 0.7), 0 0 20px rgba(255, 193, 7, 0.4);
+}
+
+/* 新年主题次要按钮 */
+[data-theme='lunar-new-year'] .btn-secondary {
+  color: #FFD54F;
+  border-color: #FFD54F;
+}
+
+/* 新年主题功能卡片 - 金色边框 */
+[data-theme='lunar-new-year'] .feature-card,
+[data-theme='lunar-new-year'] .mirror-card,
+[data-theme='lunar-new-year'] .builder-feature {
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='lunar-new-year'] .feature-card:hover,
+[data-theme='lunar-new-year'] .mirror-card:hover,
+[data-theme='lunar-new-year'] .builder-feature:hover {
+  border-color: rgba(255, 193, 7, 0.6);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 193, 7, 0.2);
+}
+
+/* 新年主题 FAQ */
+[data-theme='lunar-new-year'] .faq-item summary {
+  color: #FFF9C4 !important;
+}
+
+[data-theme='lunar-new-year'] .faq-content p,
+[data-theme='lunar-new-year'] .faq-content li {
+  color: #FFE082 !important;
+}
+
+[data-theme='lunar-new-year'] .faq-content h4 {
+  color: #FFF9C4 !important;
+}
+
+/* 新年主题链接 */
+[data-theme='lunar-new-year'] .btn-link,
+[data-theme='lunar-new-year'] .all-versions-link a,
+[data-theme='lunar-new-year'] .version-item summary {
+  color: #FFECB3;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+[data-theme='lunar-new-year'] .btn-link:hover,
+[data-theme='lunar-new-year'] .all-versions-link a:hover,
+[data-theme='lunar-new-year'] .version-item summary:hover {
+  color: #FFF9C4;
+  text-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+/* 新年主题命令行代码 */
+[data-theme='lunar-new-year'] .mirror-command code,
+[data-theme='lunar-new-year'] .requirements-content code,
+[data-theme='lunar-new-year'] .guide-content code,
+[data-theme='lunar-new-year'] .faq-content pre code {
+  color: #FFD54F;
+}
+
+/* 新年主题版本标签 */
+[data-theme='lunar-new-year'] .latest-badge {
+  background: linear-gradient(135deg, #FFA000 0%, #FF8F00 100%);
+  color: #FFF9C4;
+  box-shadow: 0 0 15px rgba(255, 160, 0, 0.5);
+}
+
+/* 新年主题推荐标签 */
+[data-theme='lunar-new-year'] .recommended-badge {
+  background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+  color: #C62828;
+  box-shadow:
+    0 2px 12px rgba(255, 193, 7, 0.6),
+    0 0 20px rgba(255, 193, 7, 0.4);
+}
+
+/* 新年主题推荐按钮 */
+[data-theme='lunar-new-year'] .btn-primary.btn-recommended {
+  background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+  border: 2px solid #FFD54F;
+  box-shadow:
+    0 0 30px rgba(229, 57, 53, 0.7),
+    0 0 40px rgba(255, 193, 7, 0.4),
+    inset 0 0 20px rgba(255, 193, 7, 0.2);
+}
+
+[data-theme='lunar-new-year'] .btn-primary.btn-recommended:hover {
+  background: linear-gradient(135deg, #EF5350 0%, #D32F2F 100%);
+  box-shadow:
+    0 0 40px rgba(229, 57, 53, 0.9),
+    0 0 60px rgba(255, 193, 7, 0.6),
+    inset 0 0 30px rgba(255, 193, 7, 0.3);
+}
