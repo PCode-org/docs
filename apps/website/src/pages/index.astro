@@ -9,6 +9,7 @@ import ActivityMetricsSection from '../components/home/ActivityMetricsSection';
 import FeaturesShowcase from '../components/home/FeaturesShowcase';
 import ShowcaseSection from '../components/home/ShowcaseSection';
 import VideoShowcase from '../components/home/VideoShowcase';
+import InstallOptionsSection from '../components/home/InstallOptionsSection';
 import Footer from '../components/home/Footer';
 import LunarNewYearDecorations from '../components/home/LunarNewYearDecorations';
 import { LunarNewYearCardGroup } from '../components/home/LunarNewYearCard';
@@ -65,6 +66,14 @@ try {
     <meta name="og:description" content={description} />
     <meta name="og:type" content="website" />
     <script is:inline>
+      // 禁用浏览器的自动滚动恢复，并强制滚动到顶部
+      // 防止刷新页面后跳到之前的滚动位置
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      // 立即滚动到顶部
+      window.scrollTo(0, 0);
+
       // 初始化主题 - 在页面加载前执行，避免闪烁
       // 与 Starlight 文档站同步使用 starlight-theme 键
       (function() {
@@ -145,6 +154,9 @@ try {
         description="通过视频快速了解 Hagicode 的核心功能和使用方法"
         client:load
       />
+
+      <!-- Install Options Section -->
+      <InstallOptionsSection client:load />
     </main>
 
     <!-- Footer -->

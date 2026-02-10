@@ -90,6 +90,7 @@ export default function Footer({ className = '' }: FooterProps) {
   const desktopLink = getLink('desktop');
   const githubLink = getLink('github');
   const qqGroupLink = getLink('qqGroup');
+  const rssLink = getLink('rss');
 
   // 外部链接属性
   const externalTarget = getLinkTarget('github');
@@ -132,6 +133,12 @@ export default function Footer({ className = '' }: FooterProps) {
           href: getLink('blog'),
           external: false,
           ariaLabel: '查看博客文章',
+        },
+        {
+          label: 'RSS 订阅',
+          href: rssLink,
+          external: false,
+          ariaLabel: '订阅博客 RSS 更新',
         },
       ],
     },

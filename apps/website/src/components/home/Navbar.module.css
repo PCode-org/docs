@@ -106,8 +106,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
   background: var(--color-surface-hover);
   border: 1px solid var(--color-border);
@@ -116,23 +116,11 @@
   overflow: hidden;
 }
 
-.logoIcon::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out);
-}
-
-.logo:hover .logoIcon::before {
-  opacity: 0.1;
-}
-
-.logoIcon svg {
-  width: 20px;
-  height: 20px;
-  color: var(--color-primary);
+.logoIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  color: currentColor;
   position: relative;
   z-index: 1;
 }
@@ -142,7 +130,7 @@
   border-color: rgba(0, 255, 255, 0.2);
 }
 
-[data-theme='dark'] .logoIcon svg {
+[data-theme='dark'] .logoIcon img {
   color: var(--color-secondary);
 }
 

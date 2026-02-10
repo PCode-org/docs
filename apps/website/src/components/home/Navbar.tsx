@@ -137,45 +137,12 @@ export default function Navbar({
         {/* Logo */}
         <a href={homeUrl} className={styles.logo} aria-label="Hagicode 首页">
           <div className={styles.logoIcon}>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7 8L3 12L7 16"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M17 8L21 12L17 16"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M14 4L10 20"
-                stroke="url(#nav-code-gradient)"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient
-                  id="nav-code-gradient"
-                  x1="10"
-                  y1="4"
-                  x2="14"
-                  y2="20"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop stopColor="#0080FF" />
-                  <stop offset="1" stopColor="#00FFFF" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <img
+              src="/logo.png"
+              alt="Hagicode"
+              width="32"
+              height="32"
+            />
           </div>
           <span className={styles.logoText}>Hagicode</span>
         </a>

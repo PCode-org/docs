@@ -102,6 +102,20 @@ export const SITE_LINKS = {
         prod: 'https://hagicode.com/docs/installation/docker-compose/',
         external: false,
     } as LinkConfig,
+
+    /** 容器部署落地页 */
+    container: {
+        dev: 'http://localhost:4322/container/',
+        prod: 'https://hagicode.com/container/',
+        external: false,
+    } as LinkConfig,
+
+    /** 博客 RSS 订阅（相对于文档站点） */
+    rss: {
+        dev: 'http://localhost:4321/blog/rss.xml',
+        prod: 'https://hagicode.com/docs/blog/rss.xml',
+        external: false,
+    } as LinkConfig,
 } as const;
 
 /**

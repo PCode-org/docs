@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useMemo, useState, useEffect } from 'react';
 import styles from './HeroSection.module.css';
 import { withBasePath } from '../../utils/path';
+import { getLink } from '@shared/links';
 import InstallButton from './InstallButton';
 import type { DesktopVersion, PlatformGroup } from '@/types/desktop';
 
@@ -162,8 +163,8 @@ export default function HeroSection({
   const [theme, setTheme] = useState<Theme>(undefined);
 
   // 根据当前 base path 动态生成链接
-  const installUrl = useMemo(() => withBasePath('/installation/docker-compose'), []);
-  const docsUrl = useMemo(() => withBasePath('/product-overview'), []);
+  const installUrl = useMemo(() => getLink('dockerCompose'), []);
+  const docsUrl = useMemo(() => getLink('productOverview'), []);
 
   // 根据主题选择标语数组
   const taglines = theme === 'lunar-new-year' ? lunarNewYearTaglines : normalTaglines;

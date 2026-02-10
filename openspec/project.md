@@ -1,17 +1,82 @@
 # Project Context
 
 ## Purpose
-Hagicode Documentation is a comprehensive documentation site built with **Astro 5.x** (migrated from Docusaurus 3.x in January 2026), designed to provide user guides, feature documentation, and technical specifications for the Hagicode project. The site supports Chinese (Simplified) as the default and only language and serves as the primary source of truth for Hagicode users and contributors.
+Hagicode Documentation is a **monorepo** containing two comprehensive websites built with **Astro 5.x** (migrated from Docusaurus 3.x in January 2026, restructured to monorepo in February 2026), designed to provide user guides, feature documentation, technical specifications, and product marketing for the Hagicode project. The sites support Chinese (Simplified) as the default and only language and serve as the primary source of truth for Hagicode users and contributors.
+
+## Project Structure
+
+### Monorepo Architecture
+
+The project uses **pnpm workspaces** to manage multiple applications and shared packages:
+
+```
+pcode-docs/
+├── apps/
+│   ├── docs/              # Starlight-powered documentation site
+│   └── website/           # Marketing landing page site
+├── packages/
+│   └── shared/            # Shared utilities and types
+├── openspec/              # OpenSpec specification-driven development
+├── scripts/               # Build and utility scripts
+└── public/                # Shared static assets
+```
+
+### Applications
+
+**apps/docs** - Technical Documentation Site
+- Built with **@astrojs/starlight** (v0.37.4)
+- Content: User guides, installation docs, quick start tutorials, blog articles
+- Deployment: Azure Static Web Apps (docs.hagicode.com)
+- Features: Blog with RSS, version monitoring, activity metrics
+
+**apps/website** - Marketing Landing Page
+- Built with **Astro 5.x** + React
+- Content: Product showcase, features, activity metrics, download options
+- Deployment: Azure Static Web Apps (hagicode.com)
+- Features: Desktop download options, activity metrics display, responsive design
+
+**packages/shared** - Shared Code
+- Desktop utilities and types
+- Version management
+- Shared links and constants
 
 ## Tech Stack
-- **Astro 5.16** - Modern static site generator with zero-JS by default
-- **React 18.2** - UI library for interactive components (via @astrojs/react)
+
+### Core Framework
+- **Astro 5.6** - Modern static site generator with zero-JS by default
+- **React 19.2** - UI library for interactive components (via @astrojs/react)
 - **TypeScript 5.3** - Type-safe configuration and component development
-- **MDX (@astrojs/mdx 4.3)** - Enhanced markdown with JSX support
+- **pnpm** - Package manager for monorepo workspace management
+
+### Documentation Site (apps/docs)
+- **@astrojs/starlight 0.37.4** - Documentation framework
+- **@astrojs/mdx 4.3** - Enhanced markdown with JSX support
+- **@astrojs/sitemap 3.7** - Automatic sitemap generation
+- **starlight-blog 0.25.2** - Blog integration with RSS support
+- **@astrojs/mermaid 11.12** - Diagram rendering for technical content
+- **rehype-external-links 3.0** - External links security handling
+- **rehype-raw 3.0** - HTML support in markdown
+- **rehype-mermaid 3.0** - Mermaid diagram processing
+- **sharp 0.34** - Image optimization
+
+### Marketing Site (apps/website)
+- **@astrojs/mdx 4.3** - MDX support for content
+- **@astrojs/react 4.4** - React component integration
+- **framer-motion 12.29** - Animation library
+- **@astrojs/sitemap 3.7** - Sitemap generation
+- **sharp 0.34** - Image optimization
+
+### Development Tools
 - **Node.js >=18.0** - Runtime environment
-- **@astrojs/mermaid** - Diagram rendering for technical content
+- **npm >=9.0** - Package manager requirement
+- **npm-run-all 4.1** - Parallel script execution
+- **playwright 1.58** - Browser automation for version monitoring
+
+### Utilities
 - **clsx 2.0** - Utility for className construction
-- **Framer Motion 12.26** - Animation library for interactive components
+- **dotenv 17.2** - Environment variable management
+- **astro-seo 1.1** - SEO meta tags
+- **astro-robots-txt 1.0** - Robots.txt generation
 
 ## Project Conventions
 
@@ -19,7 +84,7 @@ Hagicode Documentation is a comprehensive documentation site built with **Astro 
 - **TypeScript**: Use strict mode for all TypeScript files (configured in tsconfig.json)
 - **File Naming**: Use kebab-case for markdown files (e.g., `session-management.md`)
 - **Component Naming**: Use PascalCase for React components
-- **CSS**: Use CSS custom properties (variables) defined in `src/css/custom.css`
+- **CSS**: Use CSS custom properties (variables) defined in `src/styles/`
 - **Frontmatter**: All markdown documents must include `title` and `description` in frontmatter
 - **Path Aliases**: Use `@/*` for src directory imports (configured in tsconfig.json)
 - **Mermaid Diagrams**: Use Mermaid for diagrams that need version control and theme support
@@ -30,47 +95,69 @@ Hagicode Documentation is a comprehensive documentation site built with **Astro 
 
 ### Architecture Patterns
 
-**Documentation Structure**
+**Monorepo Structure**
+- `apps/docs/` - Technical documentation site (Starlight)
+- `apps/website/` - Marketing landing page (Astro + React)
+- `packages/shared/` - Shared utilities and types
+- Root `package.json` manages workspace dependencies and scripts
+
+**Documentation Structure (apps/docs)**
 - `src/content/docs/` - Main documentation content (Chinese/Simplified) using Astro Content Collections
   - `quick-start/` - Quick start guides (installation, project creation, sessions)
-- `src/content/blog/` - Blog posts and articles
-- `public/` - Static assets (images, favicons, videos)
-  - `img/` - Image assets (logo.svg, favicon.ico, social cards)
-  - `videos/` - Video assets
+  - `installation/` - Installation guides (docker-compose, package deployment)
+  - `related-software-installation/` - Related software setup (Claude Code, OpenSpec, Node.js, PostgreSQL)
+  - `blog/` - Blog posts and articles
+- `public/` - Static assets (images, favicons)
+  - `img/` - Image assets organized by feature
+  - `version-index.json` - Version monitoring data
 - `src/` - Astro components and layouts
-  - `layouts/` - Astro layout components (Layout.astro, DocsLayout.astro)
   - `components/` - React and Astro components
-    - `home/` - Homepage React components
-    - `Navbar.astro` - Navigation bar
-    - `Footer.astro` - Footer component
-  - `pages/` - File-system based routing
-    - `index.astro` - Homepage
-    - `docs/[...slug].astro` - Dynamic docs routing
-    - `blog/` - Blog pages
-  - `styles/global.css` - Global styles and CSS variables
-- `openspec/` - OpenSpec specification-driven development
-  - `specs/` - Current specifications (what IS built)
-  - `changes/` - Active proposals (what SHOULD change)
-  - `changes/archive/` - Completed/archived changes
-  - `AGENTS.md` - OpenSpec workflow instructions for AI assistants
-  - `PROPOSAL_DESIGN_GUIDELINES.md` - UI and code flow visualization standards
+    - `Clarity.astro` - Microsoft Clarity analytics
+    - `InstallButton.tsx` - Download/install button component
+    - `MermaidInjector.astro` - Mermaid diagram integration
+    - `StarlightFooter.astro` - Custom footer
+    - `StarlightHeader.astro` - Custom header
+    - `StarlightWrapper.astro` - Layout wrapper
+    - `StructuredData.astro` - SEO structured data
+  - `config/navigation.ts` - Site navigation configuration
+  - `content.config.ts` - Content collections configuration
+  - `integrations/mermaid-injector.ts` - Mermaid integration
+  - `pages/index.astro` - Homepage
+  - `styles/` - Global styles and CSS variables
+  - `types/desktop.ts` - Desktop type definitions
+  - `utils/desktop.ts` - Desktop utility functions
+  - `utils/path.ts` - Path utilities
+
+**Marketing Site Structure (apps/website)**
+- `src/components/` - React components
+  - `home/` - Homepage-specific components
+  - `desktop/` - Desktop download components
+- `src/pages/` - File-system based routing
+  - `index.astro` - Homepage
+  - `desktop/index.astro` - Desktop download page
+- `src/config/navigation.ts` - Navigation configuration
+- `src/styles/` - Global styles
+- `src/types/desktop.ts` - Desktop types
+- `src/utils/desktop.ts` - Desktop utilities
+- `public/` - Static assets
+  - `img/` - Marketing images
+  - `activity-metrics.json` - Activity metrics data
+  - `version-index.json` - Version data
 
 **Routing System**
 - File-system based routing in `src/pages/`
-- Dynamic routes using `[...slug].astro` pattern
 - Content collections for type-safe content management
-- URL structure: Configurable via `VITE_SITE_BASE` environment variable
-  - Default: `/docs/*`, `/blog/*` (root path deployment)
-  - With `/site`: `/site/docs/*`, `/site/blog/*` (subpath deployment)
-- No sidebars.ts (replaced by content collections)
+- Docs site: Starlight handles routing automatically
+- Marketing site: File-based routing with Astro
+- No sidebars.ts (replaced by content collections and navigation config)
 
 **Internationalization**
 - Default locale: Simplified Chinese (`zh-CN`)
 - Supported locales: Single locale only (`zh-CN`)
-- All content is in Chinese and located in `docs/`
+- All content is in Chinese
 - No i18n configuration (single-language site)
 - No language switcher in navbar
-- URLs do not include locale prefix (e.g., `/docs/quick-start/installation`)
+- URLs do not include locale prefix
 
 **OpenSpec Integration**
 - Spec-driven development workflow using OpenSpec
@@ -98,8 +185,8 @@ Hagicode Documentation is a comprehensive documentation site built with **Astro 
 
 **Websites**
 
-- **hagicode.com** - 官方网站，包含落地页和用户技术文档
-- **builder.hagicode.com** - Docker Compose 文件构建站点
+- **hagicode.com** - 官方营销网站，包含产品落地页和功能展示
+- **docs.hagicode.com** - 技术文档站点，包含用户指南、安装文档和博客
 
 **Hagicode** is an AI-powered code-related tool/application with the following key feature areas:
 
@@ -126,20 +213,33 @@ Hagicode Documentation is a comprehensive documentation site built with **Astro 
 - Statistics & Achievements: Usage statistics, efficiency ratings
 
 ## Important Constraints
-- **Node.js Version**: Requires Node.js >=18.0 (defined in package.json engines)
+- **Node.js Version**: Requires Node.js >=18.0, npm >=9.0 (defined in package.json engines)
 - **Build Compatibility**: All changes must pass `npm run build` without errors
 - **Type Safety**: TypeScript must pass `tsc --noEmit` without errors (strict mode enabled)
 - **Link Integrity**: Broken links cause build failures (onBrokenLinks: 'throw')
 - **OpenSpec Compliance**: Significant changes require OpenSpec proposals (see AGENTS.md)
-- **Single Language**: Site is Chinese-only; no language switching functionality
+- **Single Language**: Sites are Chinese-only; no language switching functionality
+- **Monorepo**: Changes must consider impact on both apps and shared packages
 
 ## Documentation Content Areas
 
 ### Quick Start (Current Content)
-- Installation Guide (安装指南)
+- Installation Guide (安装指南) - Docker Compose, package deployment
 - Create Your First Project (创建你的第一个项目)
 - Creating a Conversation Session (创建普通会话)
 - Creating a Proposal Session (创建提案会话)
+
+### Related Software Installation
+- Claude Code with Zai setup
+- OpenSpec setup
+- Node.js installation
+- PostgreSQL installation
+
+### Blog Content
+- Technical articles about Hagicode development
+- Migration guides (Docusaurus to Astro)
+- Integration tutorials
+- Performance optimization articles
 
 ### Planned Content Areas
 - Session Management (session-list, session-details, session-chat, concurrency)
@@ -151,25 +251,34 @@ Hagicode Documentation is a comprehensive documentation site built with **Astro 
 - User Guide (appearance/themes, settings/overview)
 
 ## External Dependencies
-- **GitHub**: Repository hosting (https://github.com/Hagicode-org/hagicode-docs)
+- **GitHub**: Repository hosting (https://github.com/Hagicode-org/site)
+- **Azure Static Web Apps**: Production deployment for both sites
 - **Astro Framework**:
-  - astro ^5.16.16
+  - astro ^5.6.1
   - @astrojs/mdx ^4.3.13
   - @astrojs/react ^4.4.2
+  - @astrojs/starlight ^0.37.4
   - @astrojs/mermaid ^11.12.2
+  - @astrojs/sitemap ^3.7.0
+  - @astrojs/partytown ^2.1.4
 - **React Ecosystem**:
-  - react ^18.2.0
-  - react-dom ^18.2.0
-  - @mdx-js/react ^3.0.0
-  - framer-motion ^12.26.1
+  - react ^19.2.4
+  - react-dom ^19.2.4
+  - framer-motion ^12.29.2
 - **Development**:
   - typescript ~5.3.0
-  - @types/node ^20.0.0
-  - @types/react ^18.2.0
-  - @types/react-dom ^18.2.0
+  - @types/react ^19.2.10
+  - @types/react-dom ^19.2.3
 - **Utilities**:
-  - clsx ^2.0.0 (className utilities)
-  - dotenv ^17.2.3 (environment variables)
+  - clsx ^2.0.0 (via dependencies)
+  - dotenv ^17.2.3
+  - sharp ^0.34.2
+  - npm-run-all ^4.1.5
+- **Content Processing**:
+  - rehype-external-links ^3.0.0
+  - rehype-mermaid ^3.0.0
+  - rehype-raw ^3.0.0
+  - starlight-blog ^0.25.2
 
 ## OpenSpec Integration Details
 
@@ -181,6 +290,25 @@ This project uses OpenSpec for spec-driven development. Key points:
 - Design guidelines in `openspec/PROPOSAL_DESIGN_GUIDELINES.md`
 - Always check `openspec list` and `openspec list --specs` before starting work
 
+### OpenSpec Development Guidelines
+
+**Important**: When creating or modifying OpenSpec proposals, design documents, or any technical specifications that include UI designs or code flow diagrams, you must follow the guidelines in:
+
+**@/openspec/PROPOSAL_DESIGN_GUIDELINES.md**
+
+This document provides:
+- UI design visualization standards (ASCII mockups, Mermaid sequence diagrams)
+- Code flow diagram requirements (flowcharts, architecture diagrams, data flow)
+- Change documentation templates (tables, before/after comparisons)
+- Mermaid syntax best practices (special character handling, naming conventions)
+- Review checklist for design completeness
+
+Reference these guidelines when:
+- Creating new proposals with UI/UX changes
+- Writing design.md documents
+- Documenting data flow or API interactions
+- Including visual diagrams in proposal.md or design.md
+
 ### OpenSpec Workflow Stages
 
 **Stage 1: Creating Changes**
@@ -188,6 +316,7 @@ This project uses OpenSpec for spec-driven development. Key points:
 - Choose unique verb-led `change-id` (e.g., `add-feature`, `update-behavior`)
 - Scaffold: `proposal.md`, `tasks.md`, optional `design.md`, and spec deltas
 - Draft spec deltas using `## ADDED|MODIFIED|REMOVED Requirements`
+- Include UI/UX diagrams per PROPOSAL_DESIGN_GUIDELINES.md
 - Run `openspec validate <id> --strict` before requesting approval
 
 **Stage 2: Implementing Changes**
@@ -204,183 +333,115 @@ This project uses OpenSpec for spec-driven development. Key points:
 ## Development Scripts
 
 ```bash
-# 开发服务器 (使用默认配置)
-npm run dev              # Start development server (localhost:4321/)
+# 开发服务器 - 启动两个站点
+npm run dev                # Start both docs (port 4321) and website (port 4322)
 
-# 针对不同部署场景的开发服务器
-npm run dev:root         # 根路径部署模式 (localhost:4321/)
-npm run dev:site         # 子路径部署模式 (localhost:4321/site/)
+# 单独启动各站点
+npm run dev:docs           # Start docs site only (localhost:4321/)
+npm run dev:website        # Start website only (localhost:4322/)
 
-# 生产构建
-npm run build            # 创建生产构建 (使用默认配置)
-npm run build:site       # 创建子路径部署生产构建 (VITE_SITE_BASE=/site)
+# 生产构建 - 构建两个站点
+npm run build              # Build both sites
+npm run build:docs         # Build docs site only
+npm run build:website      # Build website site only
 
 # 预览生产构建
-npm run preview          # 在本地预览生产构建
-npm run typecheck        # TypeScript 类型检查 (tsc --noEmit)
+npm run preview            # Preview both sites
+npm run preview:docs       # Preview docs site
+npm run preview:website    # Preview website site
+
+# TypeScript 类型检查
+npm run typecheck          # Check types (requires workspace-specific execution)
+
+# 其他实用脚本
+npm run update-metrics     # Update activity metrics data
+npm run astro              # Run astro commands in workspaces
+npm run clean              # Clean all build artifacts
+npm run clean:docs         # Clean docs build artifacts
+npm run clean:website      # Clean website build artifacts
 ```
-
-**部署场景说明**:
-- **根路径部署**: 适用于部署到域名根路径,如 `https://example.com/`
-- **子路径部署**: 适用于部署到子路径,如 `https://example.com/site/`
-- 使用 `dev:root` 和 `dev:site` 脚本可快速切换不同部署场景进行本地测试
-
-### URL 重定向机制
-
-站点实现了从旧 Docusaurus URL 结构到新 Astro URL 结构的自动重定向,确保所有永久链接(Permalinks)在迁移后仍然有效。
-
-**重定向规则**:
-- **博客文章**: `/blog/YYYY/MM/DD/slug` → `/blog/YYYY-MM-DD-slug/`
-- **文档页面**: `/docs/category/slug` → `/category/slug/`
-
-**实现方式**:
-- 构建时根据 `redirects.json` 配置生成 HTML 重定向页面
-- 使用 meta refresh 和 JavaScript 双重重定向机制
-- 包含 canonical 链接以优化 SEO
-- 支持根路径和子路径两种部署场景
-- 自动保留查询参数(如 `?utm_source=twitter`)
-
-**构建流程**:
-1. Astro 静态站点生成 (`astro build`)
-2. 生成从旧 Docusaurus URL 到新 Astro URL 的重定向页面 (`node scripts/generate-redirects.js`)
-3. 生成自定义 404 错误页面 (`node scripts/custom-404.js`)
-
-**配置文件**:
-- `redirects.json`: 定义所有重定向规则
-- `scripts/generate-redirects.js`: 重定向页面生成脚本
 
 ## Deployment
 
 ### GitHub Actions CI/CD
 
-The project uses GitHub Actions for continuous deployment to GitHub Pages:
+The project uses GitHub Actions for continuous deployment to Azure Static Web Apps:
 
-**Workflow Configuration**: `.github/workflows/deploy.yml`
+**Documentation Site**: `.github/workflows/deploy-docs.yml`
 - **Trigger**: Automatic on push to `main` branch
 - **Node.js Version**: 20.x (matches `package.json` engines requirement)
 - **Build Steps**:
-  - `npm ci` - Install dependencies with exact versions
-  - `npm run build` - Generate static site to `dist/` directory
+  - `pnpm install` - Install dependencies with pnpm
+  - `npm run build:docs` - Generate static site to `apps/docs/dist/` directory
 - **Environment Variables**:
   - `CLARITY_PROJECT_ID`: Microsoft Clarity analytics ID (from GitHub Secrets)
-  - `VITE_SITE_BASE`: Site base path configuration (可选的环境变量覆盖)
-    - 如果不设置: 使用 `astro.config.mjs` 中的默认值 (`/`)
-    - 设置为 `/site`: 用于子路径部署 (如 `https://pcode-org.github.io/site/`)
-    - 设置为 `/`: 用于根路径部署 (如 `https://pcode-org.github.io/`)
-    - 优先级: 环境变量 > astro.config.mjs 配置
-- **Deployment**: Uses GitHub Pages artifact deployment
-- **Target Branch**: `gh-pages`
-
-**GitHub Configuration Required**:
-- Enable GitHub Pages in repository settings
-- Set source to `gh-pages` branch
-- Grant GitHub Actions permissions: `contents: write`, `pages: write`, `id-token: write`
-
-**Site Base Path Configuration**:
-站点基础路径通过 `astro.config.mjs` 和 `VITE_SITE_BASE` 环境变量统一管理:
-
-1. **配置文件默认值** (`astro.config.mjs`):
-   ```javascript
-   base: import.meta.env.VITE_SITE_BASE || '/'
-   ```
-   - 未设置环境变量时,默认为 `/` (根路径部署)
-
-2. **环境变量覆盖机制**:
-   - **本地开发**: 通过 `npm run dev:site` 或手动设置 `VITE_SITE_BASE=/site`
-   - **GitHub Actions**: 在 `deploy.yml` 的 env 部分设置
-   - **优先级**: 环境变量 > 配置文件默认值
-
-3. **部署场景示例**:
-   ```bash
-   # 根路径部署 (https://example.com/)
-   npm run build
-
-   # 子路径部署 (https://example.com/site/)
-   VITE_SITE_BASE=/site npm run build
-   # 或使用便捷脚本
-   npm run build:site
-   ```
-
-4. **URL 处理**:
-   - Astro 会自动根据 base 路径调整所有内部链接、图片和资源
-   - 无需手动修改内容中的链接路径
-
-### Azure Static Web Apps CI/CD
-
-The project also supports deployment to Azure Static Web Apps for enhanced performance and global CDN distribution:
-
-**Workflow Configuration**: `.github/workflows/azure-static-web-apps-ashy-flower-0f8ed9400.yml`
-- **Trigger**: Automatic on push to `main` branch
-- **Node.js Version**: 20.x (matches `package.json` engines requirement)
-- **Build Steps**:
-  - `npm ci` - Install dependencies with exact versions
-  - `npx playwright install --with-deps` - Install Playwright browser dependencies
-  - `npm run build` - Generate static site to `dist/` directory
-- **Environment Variables**:
-  - `CLARITY_PROJECT_ID`: Microsoft Clarity analytics ID (from GitHub Secrets)
-  - Azure Static Web Apps 使用根路径部署，无需 `VITE_SITE_BASE` 环境变量
 - **Deployment**: Uses Azure Static Web Apps OIDC authentication
-- **Output Location**: `dist/` directory
+- **Output Location**: `apps/docs/dist/` directory
 
-**Azure Static Web Apps Configuration**: `public/staticwebapp.config.json`
-- **文件位置**: 配置文件必须放在 `public/` 目录中，Astro 构建时会自动复制到 `dist/` 目录
-- **文件名重要性**: 文件名必须是 `staticwebapp.config.json`，这是 Azure Static Web Apps 识别配置文件的标准名称，不能使用其他名称
-- **路由回退规则**: 使用 `navigationFallback` 配置全局路由回退，将所有不存在的文件路径重定向到 `index.html`
-  ```json
-  {
-    "navigationFallback": {
-      "rewrite": "index.html"
-    }
-  }
-  ```
-- **配置项说明**:
-  - `navigationFallback` - Azure Static Web Apps 官方推荐的路由回退配置方式
-  - `rewrite: "index.html"` - 将不存在的文件路径重写到 index.html，让客户端路由接管
-  - 与使用 `routes` 数组相比，`navigationFallback` 更简洁且是官方推荐的标准做法
-- **解决的问题**:
-  - 用户直接访问文档子路径页面（如 `/docs/quick-start/installation`）时不会出现 404 错误
-  - 刷新浏览器时页面正常加载，保持当前路由状态
-  - 分享文档链接时接收者可以直接访问对应页面
-- **部署场景支持**:
-  - 支持根路径部署（`/`）- 当前 Azure Static Web Apps 部署模式
-  - 支持子路径部署（如 `/site/`）- 如果需要可以通过环境变量配置
-  - 与 `astro.config.mjs` 中的 `base` 配置和 `VITE_SITE_BASE` 环境变量兼容
+**Marketing Site**: `.github/workflows/deploy-website.yml`
+- **Trigger**: Automatic on push to `main` branch
+- **Node.js Version**: 20.x
+- **Build Steps**:
+  - `pnpm install` - Install dependencies with pnpm
+  - `npm run build:website` - Generate static site to `apps/website/dist/` directory
+- **Environment Variables**:
+  - `CLARITY_PROJECT_ID`: Microsoft Clarity analytics ID (from GitHub Secrets)
+- **Deployment**: Uses Azure Static Web Apps OIDC authentication
+- **Output Location**: `apps/website/dist/` directory
 
-**GitHub Secrets Required**:
-- `AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_FLOWER_0F8ED9400`: Azure Static Web Apps deployment token
-- `CLARITY_PROJECT_ID`: Microsoft Clarity analytics ID (optional)
+**Azure Static Web Apps Configuration**
+- **Docs**: `apps/docs/public/staticwebapp.config.json`
+- **Website**: `apps/website/public/staticwebapp.config.json`
+- **Route Fallback**: Uses `navigationFallback` for SPA-style routing
+- **Both sites**: Root path deployment (no subpath)
 
-**多部署平台兼容性**:
-- 项目可以同时部署到 GitHub Pages 和 Azure Static Web Apps
-- 两个部署平台使用不同的 CI/CD 工作流，互不影响
-- GitHub Pages: 使用 `deploy.yml` 工作流
-- Azure Static Web Apps: 使用 `azure-static-web-apps-ashy-flower-0f8ed9400.yml` 工作流
-- `staticwebapp.config.json` 仅影响 Azure Static Web Apps 部署，不影响 GitHub Pages 部署
+**Other Workflows**:
+- `update-activity-metrics.yml` - Updates activity metrics data
+- `version-monitor.yml` - Monitors Hagicode version updates
+- `compress-images.yml` - Compresses images in the repository
 
 ### Deployment Considerations
-- Static site deployment compatible (GitHub Pages, Netlify, Vercel)
-- Build output directory: `dist/`
-- Site is single-language (Chinese only)
+- Static site deployment compatible (Azure Static Web Apps)
+- Build output directories: `apps/docs/dist/`, `apps/website/dist/`
+- Sites are single-language (Chinese only)
 - No i18n configuration needed
 - URLs are clean without locale prefix
+- Monorepo structure requires workspace-aware builds
 
 ## Configuration Files
 
-### astro.config.mjs
-- Astro framework configuration file
-- Site base path configuration:
-  - `base` 配置项从 `VITE_SITE_BASE` 环境变量读取,默认为 `/`
-  - 支持环境变量覆盖,提供灵活的部署配置
-  - Astro 自动根据 base 路径调整所有内部链接和资源
-- React, MDX, and Mermaid integrations
-- Static output mode for GitHub Pages
-- Vite configuration for environment variables (CLARITY_PROJECT_ID)
-- Markdown processing with rehype plugins:
-  - `rehypeRaw` - 支持 HTML 在 Markdown 中
-  - `rehypeMermaid` - Mermaid 图表渲染
-  - `rehypeExternalLinks` - 外部链接自动添加 `target="_blank"` 和 `rel="noopener noreferrer"`
+### Root package.json
+- Monorepo workspace configuration
+- pnpm workspace management
+- Shared scripts for building, testing, and cleaning
+- Workspace dependencies managed centrally
 
-### tsconfig.json
+### apps/docs/package.json
+- Documentation site dependencies
+- Starlight, MDX, React integration
+- Build and dev scripts
+- TypeScript configuration
+
+### apps/website/package.json
+- Marketing site dependencies
+- React integration for interactive components
+- Build and dev scripts
+- TypeScript configuration
+
+### packages/shared/package.json
+- Shared utilities package
+- Exported functions and types
+- No external dependencies
+
+### astro.config.mjs (per app)
+- Astro framework configuration file
+- React, MDX integrations
+- Sitemap generation
+- Static output mode
+- Vite configuration for environment variables (CLARITY_PROJECT_ID)
+- Markdown processing with rehype plugins
+
+### tsconfig.json (per app + root)
 - Target: ES2020
 - Strict mode enabled (extends `astro/tsconfigs/strict`)
 - Path aliases: `@/*` → `src/*`
@@ -388,77 +449,61 @@ The project also supports deployment to Azure Static Web Apps for enhanced perfo
 - Module resolution: bundler (Vite)
 - Includes: src/**/*.ts, src/**/*.tsx, src/**/*.astro
 
-### src/content/config.ts
+### apps/docs/src/content.config.ts
 - Astro Content Collections configuration
 - Type-safe frontmatter validation using Zod
 - Defines `docs` and `blog` collections
 
-### src/styles/global.css
-- Global styles and CSS custom properties
-- Dark mode theme variables
-- Migrated from Docusaurus custom.css
+### apps/website/src/content.config.ts
+- Content collections for website
+- Blog or other content types as needed
 
-### staticwebapp.config.json
-- Azure Static Web Apps configuration file (仅用于 Azure Static Web Apps 部署)
-- **文件位置**: `public/staticwebapp.config.json` - 必须放在 `public/` 目录，Astro 构建时会自动复制到 `dist/`
-- **文件命名规范**: 必须使用 `staticwebapp.config.json` 文件名，这是 Azure Static Web Apps 识别配置文件的标准名称
-- **路由回退配置**:
-  - 使用 `navigationFallback` 配置路由回退规则（Azure Static Web Apps 官方推荐方式）
-  - `rewrite: "index.html"` 将不存在的文件路径重写到 index.html
-  - 与 `routes` 数组相比更简洁，是官方标准做法
-- **作用**:
-  - 解决 SPA/静态站点在直接访问子路径时出现 404 的问题
-  - 让客户端路由能够接管所有路由
-  - 支持直接访问、刷新和分享文档链接
-- **部署兼容性**: 不影响 GitHub Pages 部署，仅对 Azure Static Web Apps 生效
+### staticwebapp.config.json (per app)
+- Azure Static Web Apps configuration
+- Route fallback configuration
+- Must be in public/ directory
+- Copied to dist/ during build
 
 ## Recent Changes
 
-### 2026-01-30: Docusaurus Tip 到 Astro Aside 迁移
-- **问题修复**: 修复 Starlight Aside 组件(提示框)标题语法不正确的问题
-- **根因分析**:
-  - Docusaurus 使用 `:::tip 标题` 语法,而 Starlight 要求 `:::tip[标题]` 语法
-  - 部分文档使用了 `:::info` 语法(Starlight 不支持,应使用 `:::note` 或 `:::tip`)
-  - 使用 Tabs 组件的文档缺少必要的导入语句
-- **修复内容**:
-  - 批量替换所有 Aside 标题语法: `:::type 标题` → `:::type[标题]`
-  - 将 `:::info` 替换为 `:::note` 或 `:::tip`(根据上下文)
-  - 为使用 Tabs 的文档添加 `import { Tabs, TabItem } from '@astrojs/starlight/components'`
-  - 创建测试页面 `/tests/aside-test/` 验证所有 aside 类型
-- **正确的 Aside 语法**:
-  - 基础类型: `:::tip`、`:::note`、`:::caution`、`:::danger`
-  - 带标题: `:::tip[你的标题]`
-  - 带图标: `:::tip{icon="heart"}`
-  - 不支持: `:::info`、`:::warning`、`:::error`
-- **文档**: 完整的提案、设计和任务文档在 `openspec/changes/docusaurus-tip-to-astro-aside-migration/`
+### 2026-02-10: Monorepo Migration
+- **Architecture Change**: Restructured from single Astro site to pnpm workspace monorepo
+- **Split Sites**: Separated documentation (apps/docs) and marketing (apps/website)
+- **Shared Package**: Created packages/shared for common utilities
+- **Build Scripts**: Updated for multi-site building and development
+- **Deployment**: Separate Azure deployment workflows for each site
+- **Documentation**: Comprehensive proposal and design in `openspec/changes/monorepo-migration/`
+- **Benefits**: Better code organization, shared dependencies, independent deployments
 
-### 2026-01-30: 外部链接新标签页打开
-- **功能增强**: 为所有外部链接自动添加 `target="_blank"` 和 `rel="noopener noreferrer"`
-- **实现方式**: 安装并配置 `rehype-external-links` 插件
-- **用户体验**: 用户可以在保持文档站点打开的同时查看外部资源
-- **安全性**: 通过 `rel="noopener noreferrer"` 防止潜在的安全风险
-- **测试页面**: 创建 `/tests/external-links-test` 用于验证功能
-- **文档**: 完整的提案、设计和任务文档在 `openspec/changes/external-links-new-tab-opening/`
+### 2026-02-04: Microsoft Clarity Integration
+- **Analytics**: Added Microsoft Clarity analytics to docs site
+- **Component**: Created Clarity.astro component
+- **Environment**: CLARITY_PROJECT_ID environment variable
+- **Privacy**: GDPR-compliant analytics with partytown
 
-### 2026-01-29: Migration from Docusaurus to Astro
+### 2026-02-01: Starlight Docs Integration
+- **Framework Migration**: Migrated from custom Astro setup to Starlight
+- **Blog**: Added starlight-blog plugin with RSS support
+- **Navigation**: Starlight's built-in navigation system
+- **Theme**: Dark mode support with Starlight theming
+
+### 2026-01-31: Docusaurus to Astro Migration
 - **Framework Upgrade**: Complete migration from Docusaurus 3.x to Astro 5.x
 - **Build System**: Faster builds, smaller bundle sizes, zero-JS by default
 - **Architecture**: Astro Content Collections for type-safe content management
 - **Performance**: Static HTML by default with hydration only for interactive components
-- **Documentation**: Comprehensive proposal, design, and tasks documentation in `openspec/changes/migrate-docusaurus-to-astro/`
-- **Configuration**: New `astro.config.mjs`, updated `tsconfig.json`
 
 ### 2026-01-14: Brand Rename - PCode to Hagicode
-- Updated all product name references from "PCode" to "Hagicode" across the entire documentation site
+- Updated all product name references from "PCode" to "Hagicode"
 - Updated site configuration (title, tagline, metadata)
-- Updated project information in `package.json`
+- Updated project information in package.json
 - Updated GitHub organization references from `PCode-org` to `Hagicode-org`
-- Updated all documentation content (Markdown files)
+- Updated all documentation content
 
 ### 2026-01-12: Set Chinese as Default Language
 - Migrated from bilingual (English + Chinese) to single-language (Chinese only)
-- Moved Chinese content from `i18n/zh-CN/docusaurus-plugin-content-docs/current/` to `docs/`
-- Removed i18n configuration from docusaurus.config.ts
+- Moved Chinese content from i18n to main docs directory
+- Removed i18n configuration
 - Removed language switcher from navbar
 - URLs no longer include locale prefix
 
