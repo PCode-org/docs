@@ -1,0 +1,51 @@
+name: Version Comparison Edge Case Tests
+
+on:
+  push:
+    paths:
+      - 'scripts/version-monitor.js'
+      - 'scripts/test-version-comparison.js'
+      - '.github/workflows/version-comparison-test.yml'
+  pull_request:
+    paths:
+      - 'scripts/version-monitor.js'
+      - 'scripts/test-version-comparison.js'
+      - '.github/workflows/version-comparison-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-edge-cases:
+    name: Test Version Comparison Edge Cases
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: 🧪 Run edge case tests
+        run: node scripts/test-version-comparison.js
+
+      - name: 📊 Check test results
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ All version comparison edge case tests passed!"
+            echo "## ✅ Version Comparison Tests Passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "All critical edge cases verified:" >> $GITHUB_STEP_SUMMARY
+            echo "- v0.1.9 vs v0.1.10 (numeric string comparison)" >> $GITHUB_STEP_SUMMARY
+            echo "- v1.10.0 vs v1.9.9 (multi-digit version numbers)" >> $GITHUB_STEP_SUMMARY
+            echo "- v1.99.99 vs v2.0.0 (major version comparison)" >> $GITHUB_STEP_SUMMARY
+            echo "- v1.0.0-beta vs v1.0.0 (prerelease vs stable)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some tests failed"
+            echo "## ❌ Version Comparison Tests Failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
